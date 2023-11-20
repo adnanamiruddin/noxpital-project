@@ -7,7 +7,7 @@
 @section('content')
     <div class="mb-8">
         <a href="{{ route('user-list.create') }}"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+            class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
             Tambah User
         </a>
     </div>
@@ -32,10 +32,7 @@
                         Role
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Status
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Action
+                        Aksi
                     </th>
                 </tr>
             </thead>
@@ -58,19 +55,39 @@
                             {{ $item->email }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ ucwords($item->role) }}
-                        </td>
-                        <td class="px-6 py-4">
-                            <span
-                                class="px-2 py-1 font-semibold leading-tight text-green-800 bg-green-300 rounded dark:bg-green-700 dark:text-green-100">
-                                Active
-                            </span>
+                            @if ($item->role == 'pasien')
+                                <span
+                                    class="px-2 py-1 font-semibold leading-tight text-green-800 bg-green-300 rounded dark:bg-green-700 dark:text-green-100">
+                                    {{ ucwords($item->role) }}
+                                </span>
+                            @endif
+
+                            @if ($item->role == 'dokter')
+                                <span
+                                    class="px-2 py-1 font-semibold leading-tight text-blue-800 bg-blue-300 rounded dark:bg-blue-700 dark:text-blue-100">
+                                    {{ ucwords($item->role) }}
+                                </span>
+                            @endif
+
+                            @if ($item->role == 'apoteker')
+                                <span
+                                    class="px-2 py-1 font-semibold leading-tight text-yellow-800 bg-yellow-300 rounded dark:bg-yellow-700 dark:text-yellow-100">
+                                    {{ ucwords($item->role) }}
+                                </span>
+                            @endif
+
+                            @if ($item->role == 'admin')
+                                <span
+                                    class="px-2 py-1 font-semibold leading-tight text-red-800 bg-red-300 rounded dark:bg-red-700 dark:text-red-100">
+                                    {{ ucwords($item->role) }}
+                                </span>
+                            @endif
                         </td>
                         <td class="px-6 py-4 flex items-center">
-                            <a href=""
-                                class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2 me-2 mb-2 dark:focus:ring-yellow-900">Edit</a>
-                            <button href=""
-                                class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
+                            <a href="/user-list/{{ $item->id }}/edit"
+                                class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2 me-2 mb-2 dark:focus:ring-yellow-900">
+                                Kelola
+                            </a>
                         </td>
                     </tr>
                 @endforeach

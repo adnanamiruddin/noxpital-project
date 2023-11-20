@@ -93,7 +93,7 @@
                 </li>
             @endif
 
-            @if (Auth::check() && (Auth::user()->role == 'apoteker' || Auth::user()->role == 'pasien'))
+            @if (Auth::check() && Auth::user()->role == 'pasien')
                 <li>
                     <x-nav-link :href="route('home')" :active="request()->routeIs('medical-records')">
                         {{ __('Medical Records') }}

@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\MedicinesController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -67,6 +68,18 @@ Route::middleware('auth')->group(function () {
             'edit' => 'user-list.edit',
             'update' => 'user-list.update',
             'destroy' => 'user-list.destroy',
+        ]);
+    });
+
+    Route::middleware('apoteker')->group(function () {
+        Route::resource('medicine', MedicinesController::class)->names([
+            'index' => 'medicine',
+            'create' => 'medicine.create',
+            'store' => 'medicine.store',
+            'show' => 'medicine.show',
+            'edit' => 'medicine.edit',
+            'update' => 'medicine.update',
+            'destroy' => 'medicine.destroy',
         ]);
     });
 });

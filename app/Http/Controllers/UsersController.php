@@ -62,7 +62,6 @@ class UsersController extends Controller
                 'role' => $request->role,
                 'password' => bcrypt($request->password),
             ]);
-
             return redirect()->to('user-list')->with('success', 'User berhasil ditambahkan');
         }
     }
@@ -80,7 +79,8 @@ class UsersController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $selectedUser = User::where('id', $id)->get();
+        return view('dashboard.admin.edit-user', compact('selectedUser'));
     }
 
     /**
@@ -88,7 +88,32 @@ class UsersController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        if (Auth::check() && Auth::user()->role == 'admin') {
+            $request->validate([
+                'name' => 'required',
+                'email' => "required|email|unique:users,email,$id",
+                'role' => 'required',
+            ], [
+                'name.required' => 'Nama harus diisi',
+                'email.required' => 'Email harus diisi',
+                'email.email' => 'Email tidak valid',
+                'email.unique' => 'Email sudah terdaftar',
+                'role.required' => 'Role harus diisi',
+            ]);
+
+            $data = [
+                'name' => $request->name,
+                'email' => $request->email,
+                'role' => $request->role,
+            ];
+
+            if ($request->password) {
+                $data['password'] = bcrypt($request->password);
+            }
+
+            User::where('id', $id)->update($data);
+            return redirect()->to('user-list')->with('success', 'Data berhasil diubah');
+        }
     }
 
     /**
@@ -96,6 +121,9 @@ class UsersController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        if (Auth::check() && Auth::user()->role == 'admin') {
+            User::where('id', $id)->delete();
+            return redirect()->to('user-list')->with('success', "Data User dengan Id $id berhasil dihapus");
+        }
     }
 }
