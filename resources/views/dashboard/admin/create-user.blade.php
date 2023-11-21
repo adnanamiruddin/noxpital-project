@@ -1,7 +1,7 @@
 @extends('dashboard.template')
 
 @section('header')
-    Create User
+    Tambah User
 @endsection
 
 @section('content')

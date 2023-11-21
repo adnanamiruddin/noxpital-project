@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\MedicalRecordsController;
 use App\Http\Controllers\MedicinesController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
@@ -72,14 +73,26 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('apoteker')->group(function () {
-        Route::resource('medicine', MedicinesController::class)->names([
-            'index' => 'medicine',
-            'create' => 'medicine.create',
-            'store' => 'medicine.store',
-            'show' => 'medicine.show',
-            'edit' => 'medicine.edit',
-            'update' => 'medicine.update',
-            'destroy' => 'medicine.destroy',
+        Route::resource('medicines', MedicinesController::class)->names([
+            'index' => 'medicines',
+            'create' => 'medicines.create',
+            'store' => 'medicines.store',
+            'show' => 'medicines.show',
+            'edit' => 'medicines.edit',
+            'update' => 'medicines.update',
+            'destroy' => 'medicines.destroy',
+        ]);
+    });
+
+    Route::middleware('dokter')->group(function () {
+        Route::resource('medical-records', MedicalRecordsController::class)->names([
+            'index' => 'medical-records',
+            'create' => 'medical-records.create',
+            'store' => 'medical-records.store',
+            'show' => 'medical-records.show',
+            'edit' => 'medical-records.edit',
+            'update' => 'medical-records.update',
+            'destroy' => 'medical-records.destroy',
         ]);
     });
 });

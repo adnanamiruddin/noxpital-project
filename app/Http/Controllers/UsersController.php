@@ -13,12 +13,11 @@ class UsersController extends Controller
      */
     public function index()
     {
-        if (Auth::check()) {
-            if (Auth::user()->role == 'admin') {
-                $users = User::where('role', '!=', 'admin')->get();
-                return view('dashboard.admin.user-list', compact('users'));
-            }
+        if (Auth::check() && Auth::user()->role == 'admin') {
+            $users = User::where('role', '!=', 'admin')->get();
+            return view('dashboard.admin.user-list', compact('users'));
         }
+        abort(401);
     }
 
     /**
@@ -29,6 +28,7 @@ class UsersController extends Controller
         if (Auth::check() && Auth::user()->role == 'admin') {
             return view('dashboard.admin.create-user');
         }
+        abort(401);
     }
 
     /**

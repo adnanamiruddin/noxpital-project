@@ -73,22 +73,22 @@
                         <path
                             d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
                     </svg>
-                    <span class="ms-3">Home</span>
+                    <span class="ms-3">Beranda</span>
                 </x-nav-link>
             </li>
 
             @if (Auth::check() && (Auth::user()->role == 'admin' || Auth::user()->role == 'dokter'))
                 <li>
                     <x-nav-link :href="route('user-list')" :active="request()->routeIs('user-list')">
-                        {{ __('User List') }}
+                        {{ __('Daftar User') }}
                     </x-nav-link>
                 </li>
             @endif
 
             @if (Auth::check() && Auth::user()->role == 'apoteker')
                 <li>
-                    <x-nav-link :href="route('home')" :active="request()->routeIs('medicine-list')">
-                        {{ __('Medicine List') }}
+                    <x-nav-link :href="route('medicines')" :active="request()->routeIs('medicines')">
+                        {{ __('Daftar Obat') }}
                     </x-nav-link>
                 </li>
             @endif
@@ -103,7 +103,7 @@
 
             <li>
                 <x-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit')">
-                    {{ __('Profile') }}
+                    {{ __('Profil') }}
                 </x-nav-link>
             </li>
         </ul>

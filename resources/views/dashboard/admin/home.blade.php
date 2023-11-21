@@ -1,7 +1,7 @@
 @extends('dashboard.template')
 
 @section('header')
-    Home
+    Beranda
 @endsection
 
 @section('content')
