@@ -18,7 +18,7 @@ return new class extends Migration
             $table->enum('type', ['keras', 'biasa'])->default('biasa');
             $table->integer('stock');
             $table->integer('price');
-            $table->foreignId('id_apoteker')->constrained('users')->onDelete('cascade');
+            $table->foreignId('pharmacist_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

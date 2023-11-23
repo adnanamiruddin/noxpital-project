@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('medical_records_medicines', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_medical_record')->constrained('medical_records');
-            $table->foreignId('id_medicine')->constrained('medicines');
+            $table->foreignId('medical_record_id')->constrained('medical_records');
+            $table->foreignId('medicine_id')->constrained('medicines');
             $table->integer('amount');
             $table->timestamps();
         });

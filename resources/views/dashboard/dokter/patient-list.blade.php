@@ -52,8 +52,8 @@
                         </td>
                         <td class="px-6 py-4 flex items-center">
                             <a href="/user-list/{{ $item->id }}/edit"
-                                class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2 me-2 mb-2 dark:focus:ring-yellow-900">
-                                Kelola
+                                class="focus:outline-none text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 me-2 mb-2 dark:focus:ring-blue-900">
+                                Selengkapnya
                             </a>
                         </td>
                     </tr>

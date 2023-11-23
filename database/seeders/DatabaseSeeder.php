@@ -56,6 +56,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'dokter1@gmail.com',
             'password' => bcrypt('12345678'),
             'role' => 'dokter',
+            'is_on_duty' => true,
         ]);
 
         User::create([
@@ -63,6 +64,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'dokter2@gmail.com',
             'password' => bcrypt('12345678'),
             'role' => 'dokter',
+            'is_on_duty' => true,
         ]);
 
         User::create([

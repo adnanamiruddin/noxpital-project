@@ -17,10 +17,9 @@ class MedicalRecordFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_patient' => fake()->numberBetween(2, 4),
-            'id_doctor' => fake()->numberBetween(5, 6),
+            'patient_id' => fake()->numberBetween(2, 4),
+            'doctor_id' => fake()->numberBetween(5, 6),
             'action' => fake()->text(),
-            // 'amount' => fake()->numberBetween(1, 10),
         ];
     }
 }

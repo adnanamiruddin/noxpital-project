@@ -22,7 +22,7 @@ class MedicineFactory extends Factory
             'price' => fake()->randomNumber(5),
             'stock' => fake()->randomNumber(2),
             'description' => fake()->text(),
-            'id_apoteker' => fake()->numberBetween(7, 8),
+            'pharmacist_id' => fake()->numberBetween(7, 8),
             // 'image' => fake()->image('public/storage/images', 640, 480, null, false),
         ];
     }

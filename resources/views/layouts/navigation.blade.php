@@ -83,6 +83,12 @@
                         {{ __('Daftar User') }}
                     </x-nav-link>
                 </li>
+
+                <li>
+                    <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
+                        {{ __('Arahkan Pasien') }}
+                    </x-nav-link>
+                </li>
             @endif
             </li>
 
