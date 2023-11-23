@@ -77,10 +77,19 @@
                 </x-nav-link>
             </li>
 
-            @if (Auth::check() && (Auth::user()->role == 'admin' || Auth::user()->role == 'dokter'))
+            @if (Auth::check() && Auth::user()->role == 'admin')
                 <li>
                     <x-nav-link :href="route('user-list')" :active="request()->routeIs('user-list')">
                         {{ __('Daftar User') }}
+                    </x-nav-link>
+                </li>
+            @endif
+            </li>
+
+            @if (Auth::check() && Auth::user()->role == 'dokter')
+                <li>
+                    <x-nav-link :href="route('patient-list')" :active="request()->routeIs('patient-list')">
+                        {{ __('Daftar Pasien') }}
                     </x-nav-link>
                 </li>
             @endif
@@ -93,10 +102,10 @@
                 </li>
             @endif
 
-            @if (Auth::check() && Auth::user()->role == 'pasien')
+            @if (Auth::check() && (Auth::user()->role == 'dokter' || Auth::user()->role == 'pasien'))
                 <li>
-                    <x-nav-link :href="route('home')" :active="request()->routeIs('medical-records')">
-                        {{ __('Medical Records') }}
+                    <x-nav-link :href="route('medical-records')" :active="request()->routeIs('medical-records')">
+                        {{ __('Rekam Medis') }}
                     </x-nav-link>
                 </li>
             @endif

@@ -85,6 +85,8 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('dokter')->group(function () {
+        Route::get('patient-list', [UsersController::class, 'index'])->name('patient-list');
+        // Route::get('patient-list/{id}', [UsersController::class, 'show'])->name('patient-list.show');
         Route::resource('medical-records', MedicalRecordsController::class)->names([
             'index' => 'medical-records',
             'create' => 'medical-records.create',

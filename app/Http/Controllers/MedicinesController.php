@@ -94,6 +94,7 @@ class MedicinesController extends Controller
                 if (Auth::user()->id == $item->id_apoteker) {
                     return view('dashboard.apoteker.edit-medicine', compact('selectedMedicine'));
                 }
+                // return redirect()->to('medicines')->with('error', 'Anda tidak memiliki akses ke halaman ini');
                 abort(401);
             }
         }

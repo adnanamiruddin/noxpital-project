@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
 {
@@ -13,9 +14,19 @@ class UsersController extends Controller
      */
     public function index()
     {
-        if (Auth::check() && Auth::user()->role == 'admin') {
-            $users = User::where('role', '!=', 'admin')->get();
-            return view('dashboard.admin.user-list', compact('users'));
+        if (Auth::check()) {
+            if (Auth::user()->role == 'admin') {
+                $users = User::where('role', '!=', 'admin')->get();
+                return view('dashboard.admin.user-list', compact('users'));
+            } else if (Auth::user()->role == 'dokter') {
+                $users = DB::table('users')
+                    ->join('medical_records', 'users.id', '=', 'medical_records.id_patient')
+                    ->select('*')
+                    ->where('users.role', '=', 'pasien')
+                    ->where('medical_records.id_doctor', '=', Auth::user()->id)
+                    ->get();
+                return view('dashboard.dokter.patient-list', compact('users'));
+            }
         }
         abort(401);
     }
