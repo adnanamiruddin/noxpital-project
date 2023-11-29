@@ -29,6 +29,9 @@
                         Tindakan
                     </th>
                     <th scope="col" class="px-6 py-3">
+                        Tanggal Rekam Medis
+                    </th>
+                    <th scope="col" class="px-6 py-3">
                         Dilayani Oleh
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -55,6 +58,9 @@
                             {{ substr($item->action, 0, 100) }}...
                         </td>
                         <td class="px-6 py-4">
+                            {{ $item->medical_record_created_at }}
+                        </td>
+                        <td class="px-6 py-4">
                             {{ $item->doctor_name }}
                         </td>
                         <td class="px-6 py-4 flex items-center">
@@ -64,7 +70,7 @@
                                     Kelola
                                 </a>
                             @else
-                                <button href="/medical-records/{{ $item->id }}/edit"
+                                <button
                                     class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2 me-2 mb-2 dark:focus:ring-yellow-900 brightness-75"
                                     disabled>
                                     Kelola

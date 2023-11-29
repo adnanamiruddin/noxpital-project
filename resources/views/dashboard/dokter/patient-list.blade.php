@@ -25,6 +25,9 @@
                         Tindakan
                     </th>
                     <th scope="col" class="px-6 py-3">
+                        Dilayani Pada Tanggal
+                    </th>
+                    <th scope="col" class="px-6 py-3">
                         Aksi
                     </th>
                 </tr>
@@ -49,6 +52,9 @@
                         </td>
                         <td class="px-6 py-4">
                             {{ substr($item->action, 0, 100) }}...
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ $item->medical_record_created_at }}
                         </td>
                         <td class="px-6 py-4 flex items-center">
                             <a href="/patient-list/{{ $item->patient_id }}/edit"

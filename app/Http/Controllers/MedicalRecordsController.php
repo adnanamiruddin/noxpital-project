@@ -25,7 +25,12 @@ class MedicalRecordsController extends Controller
                     ->join('medical_records', 'users.id', '=', 'medical_records.patient_id')
                     ->join('users as doctors', 'medical_records.doctor_id', '=', 'doctors.id')
                     ->where('users.role', '=', 'pasien')
-                    ->select('users.*', 'medical_records.*', 'doctors.name as doctor_name')
+                    ->select(
+                        'users.*',
+                        'medical_records.*',
+                        'doctors.name as doctor_name',
+                        'medical_records.created_at as medical_record_created_at'
+                    )
                     ->orderBy('medical_records.updated_at', 'desc')
                     ->get();
                 return view('dashboard.dokter.medical-records', compact('patients'));
@@ -111,6 +116,7 @@ class MedicalRecordsController extends Controller
                 );
             }
 
+            $totalPrice = 0;
             if ($request->medicines) {
                 foreach ($request->medicines as $item) {
                     try {
@@ -126,6 +132,7 @@ class MedicalRecordsController extends Controller
                             'medicine_id' => $medicine->id,
                             'amount' => $item['amount'],
                         ];
+                        $totalPrice += $medicine->price * $item['amount'];
                         MedicalRecordMedicine::create($dataMedicine);
                     } catch (\Throwable $th) {
                         MedicalRecord::where('id', $insertData->id)->delete();
@@ -133,6 +140,7 @@ class MedicalRecordsController extends Controller
                     }
                 }
             }
+            
 
             return redirect()->to('medical-records')->with('success', 'Berhasil menambahkan data rekam medis');
         }

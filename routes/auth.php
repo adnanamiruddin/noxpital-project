@@ -71,7 +71,6 @@ Route::middleware('auth')->group(function () {
             'update' => 'user-list.update',
             'destroy' => 'user-list.destroy',
         ]);
-
         Route::resource('appointments', AppointmentsController::class)->names([
             'index' => 'appointments',
             'create' => 'appointments.create',
@@ -107,7 +106,6 @@ Route::middleware('auth')->group(function () {
             'update' => 'medical-records.update',
             'destroy' => 'medical-records.destroy',
         ]);
-
         Route::resource('doctor-appointments', AppointmentsController::class)->names([
             'index' => 'doctor-appointments',
             'create' => 'doctor-appointments.create',
@@ -129,7 +127,6 @@ Route::middleware('auth')->group(function () {
             'update' => 'patient-medical-records.update',
             'destroy' => 'patient-medical-records.destroy',
         ]);
-
         // Route::resource('patient-appointments', AppointmentsController::class)->names([
         //     'index' => 'patient-appointments',
         //     'create' => 'patient-appointments.create',

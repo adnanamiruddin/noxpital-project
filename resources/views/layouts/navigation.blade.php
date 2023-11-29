@@ -117,6 +117,12 @@
                         {{ __('Daftar Obat') }}
                     </x-nav-link>
                 </li>
+
+                <li>
+                    <x-nav-link :href="route('medicines')" :active="request()->routeIs('medicines')">
+                        {{ __('Daftar Pesanan') }}
+                    </x-nav-link>
+                </li>
             @endif
 
             @if (Auth::check() && Auth::user()->role == 'pasien')

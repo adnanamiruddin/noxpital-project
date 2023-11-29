@@ -21,7 +21,13 @@ class AppointmentsController extends Controller
                     ->join('users', 'appointments.patient_id', '=', 'users.id')
                     ->join('users as doctors', 'appointments.doctor_id', '=', 'doctors.id')
                     ->orderBy('appointments.updated_at', 'desc')
-                    ->select('appointments.*', 'users.name as patient_name', 'users.email as patient_email', 'doctors.name as doctor_name')
+                    ->select(
+                        'appointments.*',
+                        'users.name as patient_name',
+                        'users.email as patient_email',
+                        'doctors.name as doctor_name',
+                        'appointments.created_at as appointment_created_at'
+                    )
                     ->get();
                 return view('dashboard.admin.appointments', compact('appointments'));
             } else if (Auth::user()->role == 'dokter') {
@@ -29,11 +35,29 @@ class AppointmentsController extends Controller
                     ->join('users', 'appointments.patient_id', '=', 'users.id')
                     ->where('appointments.doctor_id', Auth::user()->id)
                     ->orderBy('appointments.updated_at', 'desc')
-                    ->select('appointments.*', 'users.name as patient_name', 'users.email as patient_email')
+                    ->select(
+                        'appointments.*',
+                        'users.name as patient_name',
+                        'users.email as patient_email',
+                        'appointments.created_at as appointment_created_at'
+                    )
                     ->get();
                 return view('dashboard.dokter.appointments', compact('appointments'));
+            } else if (Auth::user()->role == 'apoteker') {
+                $appointments = DB::table('appointments')
+                ->join('users', 'appointments.patient_id', '=', 'users.id')
+                ->where('appointments.doctor_id', Auth::user()->id)
+                ->orderBy('appointments.updated_at', 'desc')
+                ->select(
+                    'appointments.*',
+                    'users.name as patient_name',
+                    'users.email as patient_email',
+                    'appointments.created_at as appointment_created_at'
+                );
+                return view('dashboard.apoteker.appointments', compact('appointments'));
+            } else {
+                abort(401);
             }
-            abort(401);
         }
         abort(403);
     }

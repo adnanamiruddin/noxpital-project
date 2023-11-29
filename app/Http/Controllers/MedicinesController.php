@@ -17,7 +17,7 @@ class MedicinesController extends Controller
         if (Auth::check() && Auth::user()->role == 'apoteker') {
             $medicines = DB::table('medicines')
                 ->join('users', 'medicines.pharmacist_id', '=', 'users.id')
-                ->select('medicines.*', 'users.name as apoteker_name')
+                ->select('medicines.*', 'users.name as apoteker_name', 'medicines.updated_at as medicines_updated_at')
                 ->get();
             return view('dashboard.apoteker.medicines', compact('medicines'));
         }

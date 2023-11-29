@@ -1,7 +1,7 @@
 @extends('dashboard.template')
 
 @section('header')
-    Daftar Janjian Saya
+    Daftar Pesanan
 @endsection
 
 @section('content')

@@ -34,6 +34,9 @@
                     <th scope="col" class="px-6 py-3">
                         Nomor Antrian
                     </th>
+                    <th scope="col" class="px-6 py-3">
+                        Tanggal Janji Temu Dibuat
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -64,21 +67,18 @@
                                     {{ ucwords($item->status) }}
                                 </span>
                             @endif
-
                             @if ($item->status == 'sedang konsultasi')
                                 <span
                                     class="px-2 py-1 font-semibold leading-tight text-blue-800 bg-blue-300 rounded dark:bg-blue-700 dark:text-blue-100">
                                     {{ ucwords($item->status) }}
                                 </span>
                             @endif
-
                             @if ($item->status == 'menunggu')
                                 <span
                                     class="px-2 py-1 font-semibold leading-tight text-yellow-800 bg-yellow-300 rounded dark:bg-yellow-700 dark:text-yellow-100">
                                     {{ ucwords($item->status) }}
                                 </span>
                             @endif
-
                             @if ($item->status == 'ditolak')
                                 <span
                                     class="px-2 py-1 font-semibold leading-tight text-red-800 bg-red-300 rounded dark:bg-red-700 dark:text-red-100">
@@ -93,13 +93,15 @@
                                     Tidak ada nomor antrian
                                 </span>
                             @endif
-
                             @if ($item->queue_number != null)
                                 <span
                                     class="px-2 py-1 font-semibold leading-tight text-green-800 bg-green-300 rounded dark:bg-green-700 dark:text-green-100">
                                     {{ $item->queue_number }}
                                 </span>
                             @endif
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ $item->appointment_created_at }}
                         </td>
                     </tr>
                 @endforeach

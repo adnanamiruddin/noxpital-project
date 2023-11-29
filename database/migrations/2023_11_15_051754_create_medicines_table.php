@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('medicines', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->text('description');
             $table->enum('type', ['keras', 'biasa'])->default('biasa');
             $table->integer('stock');
