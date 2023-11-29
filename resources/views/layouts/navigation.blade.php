@@ -103,6 +103,12 @@
                         {{ __('Daftar Janjian') }}
                     </x-nav-link>
                 </li>
+
+                <li>
+                    <x-nav-link :href="route('medical-records')" :active="request()->routeIs('medical-records')">
+                        {{ __('Rekam Medis') }}
+                    </x-nav-link>
+                </li>
             @endif
 
             @if (Auth::check() && Auth::user()->role == 'apoteker')
@@ -113,9 +119,9 @@
                 </li>
             @endif
 
-            @if (Auth::check() && (Auth::user()->role == 'dokter' || Auth::user()->role == 'pasien'))
+            @if (Auth::check() && Auth::user()->role == 'pasien')
                 <li>
-                    <x-nav-link :href="route('medical-records')" :active="request()->routeIs('medical-records')">
+                    <x-nav-link :href="route('patient-medical-records')" :active="request()->routeIs('patient-medical-records')">
                         {{ __('Rekam Medis') }}
                     </x-nav-link>
                 </li>

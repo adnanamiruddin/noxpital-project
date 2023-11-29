@@ -7,6 +7,7 @@ use App\Models\MedicalRecord;
 use App\Models\MedicalRecordMedicine;
 use App\Models\Medicine;
 use App\Models\User;
+use Error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -18,14 +19,26 @@ class MedicalRecordsController extends Controller
      */
     public function index()
     {
-        if (Auth::check() && Auth::user()->role == 'dokter') {
-            $patients = DB::table('users')
-                ->join('medical_records', 'users.id', '=', 'medical_records.patient_id')
-                ->join('users as doctors', 'medical_records.doctor_id', '=', 'doctors.id')
-                ->select('users.*', 'medical_records.*', 'doctors.name as doctor_name')
-                ->where('users.role', '=', 'pasien')
-                ->get();
-            return view('dashboard.dokter.medical-records', compact('patients'));
+        if (Auth::check()) {
+            if (Auth::user()->role == 'dokter') {
+                $patients = DB::table('users')
+                    ->join('medical_records', 'users.id', '=', 'medical_records.patient_id')
+                    ->join('users as doctors', 'medical_records.doctor_id', '=', 'doctors.id')
+                    ->where('users.role', '=', 'pasien')
+                    ->select('users.*', 'medical_records.*', 'doctors.name as doctor_name')
+                    ->orderBy('medical_records.updated_at', 'desc')
+                    ->get();
+                return view('dashboard.dokter.medical-records', compact('patients'));
+            } else if (Auth::user()->role == 'pasien') {
+                $medicalRecords = DB::table('medical_records')
+                    ->join('users', 'medical_records.doctor_id', '=', 'users.id')
+                    ->where('medical_records.patient_id', '=', Auth::user()->id)
+                    ->select('medical_records.*', 'users.name as doctor_name')
+                    ->orderBy('medical_records.updated_at', 'desc')
+                    ->get();
+                return view('dashboard.pasien.medical-records', compact('medicalRecords'));
+            }
+            abort(401);
         }
     }
 
@@ -71,22 +84,25 @@ class MedicalRecordsController extends Controller
             $insertData = MedicalRecord::create($data);
 
             try {
-                $appointmentId = DB::table('appointments')
+                $newestAppointmentData = DB::table('appointments')
                     ->join('users', 'appointments.patient_id', '=', 'users.id')
                     ->where('users.role', 'pasien')
                     ->where('doctor_id', Auth::user()->id)
-                    ->where('patient_id', $dataPatient->id)
-                    ->where('users.email', $request->email_patient)
                     ->where('status', 'sedang konsultasi')
-                    ->select('appointments.id')
+                    ->select('appointments.id as appointment_id', 'users.email as patient_email')
                     ->orderBy('appointments.updated_at', 'desc')
                     ->limit(1)
                     ->first();
-                Appointment::find($appointmentId->id)->update([
-                    'status' => 'selesai',
-                    'queue_number' => $this->generate_queue_number(),
-                    'medical_record_id' => $insertData->id,
-                ]);
+
+                if ($newestAppointmentData->patient_email == $request->email_patient) {
+                    Appointment::find($newestAppointmentData->appointment_id)->update([
+                        'status' => 'selesai',
+                        'queue_number' => $this->generate_queue_number(),
+                        'medical_record_id' => $insertData->id,
+                    ]);
+                } else {
+                    throw new Error();
+                }
             } catch (\Throwable $th) {
                 MedicalRecord::where('id', $insertData->id)->delete();
                 return redirect()->back()->with(
@@ -127,7 +143,25 @@ class MedicalRecordsController extends Controller
      */
     public function show(string $id)
     {
-        //
+        if (Auth::check() && Auth::user()->role == 'pasien') {
+            $medicalRecord = DB::table('medical_records')
+                ->join('users', 'medical_records.doctor_id', '=', 'users.id')
+                ->where('medical_records.patient_id', '=', Auth::user()->id)
+                ->where('medical_records.id', '=', $id)
+                ->select('medical_records.*', 'users.name as doctor_name')
+                ->first();
+
+            if ($medicalRecord) {
+                $medicines = DB::table('medical_records_medicines')
+                    ->join('medicines', 'medical_records_medicines.medicine_id', '=', 'medicines.id')
+                    ->where('medical_records_medicines.medical_record_id', '=', $id)
+                    ->select('medicines.*', 'medical_records_medicines.amount as amount')
+                    ->get();
+
+                return view('dashboard.pasien.detail-medical-record', compact('medicalRecord', 'medicines'));
+            }
+            abort(404);
+        }
     }
 
     /**
@@ -156,25 +190,20 @@ class MedicalRecordsController extends Controller
 
     private function generate_queue_number()
     {
-        // Get the current date
         $date = now()->format('Ymd');
 
-        // Get the last queue number for the current date
         $lastQueueNumber = DB::table('appointments')
             ->where('queue_number', 'like', $date . '%')
             ->orderBy('queue_number', 'desc')
             ->value('queue_number');
 
-        // Extract the counter part from the last queue number
         $counter = 1;
         if ($lastQueueNumber) {
             $lastCounter = (int)substr($lastQueueNumber, -4);
             $counter = $lastCounter + 1;
         }
 
-        // Generate the new queue number
         $newQueueNumber = $date . sprintf('%04d', $counter);
-
         return $newQueueNumber;
     }
 }

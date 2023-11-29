@@ -118,4 +118,26 @@ Route::middleware('auth')->group(function () {
             'destroy' => 'doctor-appointments.destroy',
         ]);
     });
+
+    Route::middleware('pasien')->group(function () {
+        Route::resource('patient-medical-records', MedicalRecordsController::class)->names([
+            'index' => 'patient-medical-records',
+            'create' => 'patient-medical-records.create',
+            'store' => 'patient-medical-records.store',
+            'show' => 'patient-medical-records.show',
+            'edit' => 'patient-medical-records.edit',
+            'update' => 'patient-medical-records.update',
+            'destroy' => 'patient-medical-records.destroy',
+        ]);
+
+        // Route::resource('patient-appointments', AppointmentsController::class)->names([
+        //     'index' => 'patient-appointments',
+        //     'create' => 'patient-appointments.create',
+        //     'store' => 'patient-appointments.store',
+        //     'show' => 'patient-appointments.show',
+        //     'edit' => 'patient-appointments.edit',
+        //     'update' => 'patient-appointments.update',
+        //     'destroy' => 'patient-appointments.destroy',
+        // ]);
+    });
 });

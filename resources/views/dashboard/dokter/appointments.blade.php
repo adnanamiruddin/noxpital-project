@@ -87,7 +87,23 @@
                             @endif
                         </td>
                         <td class="px-6 py-4">
-                            {{ $item->queue_number }}
+                            @if ($item->queue_number == null)
+                                {{-- <span
+                                    class="px-2 py-1 font-semibold leading-tight text-yellow-800 bg-yellow-300 rounded dark:bg-yellow-700 dark:text-yellow-100">
+                                    Tidak ada nomor antrian
+                                </span> --}}
+                                <span
+                                    class="px-2 py-1 font-semibold leading-tight text-orange-500 bg-orange-200 rounded dark:bg-orange-700 dark:text-orange-100">
+                                    Tidak Ada Nomor Antrian
+                                </span>
+                            @endif
+
+                            @if ($item->queue_number != null)
+                                <span
+                                    class="px-2 py-1 font-semibold leading-tight text-green-800 bg-green-300 rounded dark:bg-green-700 dark:text-green-100">
+                                    {{ $item->queue_number }}
+                                </span>
+                            @endif
                         </td>
                         <td class="px-6 py-4 flex items-center">
                             <form method="POST" action="{{ route('doctor-appointments') }}">

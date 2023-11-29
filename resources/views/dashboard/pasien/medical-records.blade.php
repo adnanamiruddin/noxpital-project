@@ -1,7 +1,7 @@
 @extends('dashboard.template')
 
 @section('header')
-    Daftar Pasien yang Telah Dilayani
+    Rekam Medis Saya
 @endsection
 
 @section('content')
@@ -13,16 +13,16 @@
                         No.
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Id Pasien
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Nama
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Email
+                        Id Rekam Medis
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Tindakan
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Tanggal Rekam Medis
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Dilayani Oleh
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Aksi
@@ -31,7 +31,7 @@
             </thead>
             <tbody>
                 <?php $no = 1; ?>
-                @foreach ($users as $item)
+                @foreach ($medicalRecords as $item)
                     <tr
                         class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 hover:brightness-95">
                         <th scope="row"
@@ -39,19 +39,19 @@
                             {{ $no++ }}
                         </th>
                         <td class="px-6 py-4 text-center">
-                            {{ $item->patient_id }}
+                            {{ $item->id }}
                         </td>
-                        <td class="px-6 py-4">
-                            {{ $item->name }}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ $item->email }}
-                        </td>
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 text-justify">
                             {{ substr($item->action, 0, 100) }}...
                         </td>
+                        <td class="px-6 py-4">
+                            {{ $item->created_at }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ $item->doctor_name }}
+                        </td>
                         <td class="px-6 py-4 flex items-center">
-                            <a href="/patient-list/{{ $item->patient_id }}/edit"
+                            <a href="/patient-medical-records/{{ $item->id }}"
                                 class="focus:outline-none text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 me-2 mb-2 dark:focus:ring-blue-900">
                                 Selengkapnya
                             </a>
