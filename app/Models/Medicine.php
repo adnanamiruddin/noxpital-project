@@ -15,6 +15,6 @@ class Medicine extends Model
         'type',
         'stock',
         'price',
-        'id_apoteker',
+        'pharmacists_id',
     ];
 }

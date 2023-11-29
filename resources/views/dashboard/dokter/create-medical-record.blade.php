@@ -38,8 +38,6 @@
         }
     </style>
 
-
-
     <form method="POST" action="{{ route('medical-records') }}">
         @csrf
         <div class="mb-6 flex justify-between items-center gap-3">
@@ -65,7 +63,7 @@
             </label>
             <textarea id="action" name="action" rows="5"
                 class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Parasetamol merupakan obat..."></textarea>
+                placeholder="Parasetamol merupakan obat..." required></textarea>
         </div>
 
         <div id="medicine-list"></div>

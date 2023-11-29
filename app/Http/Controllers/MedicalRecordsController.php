@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Appointment;
 use App\Models\MedicalRecord;
 use App\Models\MedicalRecordMedicine;
 use App\Models\Medicine;
@@ -55,31 +56,47 @@ class MedicalRecordsController extends Controller
                 'action.required' => 'Tindakan harus diisi',
             ]);
 
-            $idPatient = User::where('email', $request->email_patient)->where('role', 'pasien')->firstOrFail();
+            try {
+                $dataPatient = User::where('email', $request->email_patient)->where('role', 'pasien')->firstOrFail();
+            } catch (\Throwable $th) {
+                return redirect()->back()->with('error', 'Email pasien tidak ditemukan!');
+            }
 
             $data = [
-                'patient_id' => $idPatient->id,
+                'patient_id' => $dataPatient->id,
                 'doctor_id' => Auth::user()->id,
                 'action' => $request->action,
             ];
-
             $data['created_at'] = $request->filled('created_at') ? $request->created_at : now();
-
             $insertData = MedicalRecord::create($data);
+
+            try {
+                $appointmentId = DB::table('appointments')
+                    ->join('users', 'appointments.patient_id', '=', 'users.id')
+                    ->where('users.role', 'pasien')
+                    ->where('doctor_id', Auth::user()->id)
+                    ->where('patient_id', $dataPatient->id)
+                    ->where('users.email', $request->email_patient)
+                    ->where('status', 'sedang konsultasi')
+                    ->select('appointments.id')
+                    ->orderBy('appointments.updated_at', 'desc')
+                    ->limit(1)
+                    ->first();
+                Appointment::find($appointmentId->id)->update([
+                    'status' => 'selesai',
+                    'queue_number' => $this->generate_queue_number(),
+                    'medical_record_id' => $insertData->id,
+                ]);
+            } catch (\Throwable $th) {
+                MedicalRecord::where('id', $insertData->id)->delete();
+                return redirect()->back()->with(
+                    'error',
+                    'Terjadi kesalahan pada sistem. Mohon input email pasien sesuai dengan email pasien pada janji temu yang terakhir disetujui oleh dokter'
+                );
+            }
 
             if ($request->medicines) {
                 foreach ($request->medicines as $item) {
-                    // $item->validate([
-                    //     'name' => 'required',
-                    //     'amount' => 'required|numeric',
-                    // ], [
-                    //     'name.required' => 'Nama obat harus diisi',
-                    //     'amount.required' => 'Jumlah obat harus diisi',
-                    //     'amount.numeric' => 'Jumlah obat harus berupa angka',
-                    // ]);
-                    // $data['name'] = $item->name;
-                    // $data['amount'] = $item->amount;
-
                     try {
                         $medicine = Medicine::where('name', $item['name'])->firstOrFail();
 
@@ -135,5 +152,29 @@ class MedicalRecordsController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    private function generate_queue_number()
+    {
+        // Get the current date
+        $date = now()->format('Ymd');
+
+        // Get the last queue number for the current date
+        $lastQueueNumber = DB::table('appointments')
+            ->where('queue_number', 'like', $date . '%')
+            ->orderBy('queue_number', 'desc')
+            ->value('queue_number');
+
+        // Extract the counter part from the last queue number
+        $counter = 1;
+        if ($lastQueueNumber) {
+            $lastCounter = (int)substr($lastQueueNumber, -4);
+            $counter = $lastCounter + 1;
+        }
+
+        // Generate the new queue number
+        $newQueueNumber = $date . sprintf('%04d', $counter);
+
+        return $newQueueNumber;
     }
 }

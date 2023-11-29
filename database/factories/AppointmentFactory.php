@@ -20,7 +20,6 @@ class AppointmentFactory extends Factory
             'patient_id' => fake()->numberBetween(2, 4),
             'doctor_id' => fake()->numberBetween(5, 6),
             'status' => fake()->randomElement(['menunggu', 'sedang konsultasi', 'selesai', 'ditolak']),
-            'queue_number' => fake()->randomElement([null, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
             'medical_record_id' => fake()->randomElement([null, 1, 2, 3, 4, 5]),
         ];
     }

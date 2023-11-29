@@ -31,6 +31,9 @@
                     <th scope="col" class="px-6 py-3">
                         Status
                     </th>
+                    <th scope="col" class="px-6 py-3">
+                        Nomor Antrian
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -82,6 +85,9 @@
                                     {{ ucwords($item->status) }}
                                 </span>
                             @endif
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ $item->queue_number }}
                         </td>
                     </tr>
                 @endforeach

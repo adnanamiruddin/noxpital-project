@@ -5,6 +5,13 @@
 @endsection
 
 @section('content')
+    <div class="mb-8">
+        <a href="{{ route('medical-records.create') }}"
+            class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
+            Tambah Rekam Medis
+        </a>
+    </div>
+
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -23,6 +30,9 @@
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Status
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Nomor Antrian
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Aksi
@@ -75,6 +85,9 @@
                                     {{ ucwords($item->status) }}
                                 </span>
                             @endif
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ $item->queue_number }}
                         </td>
                         <td class="px-6 py-4 flex items-center">
                             <form method="POST" action="{{ route('doctor-appointments') }}">

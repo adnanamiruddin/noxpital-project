@@ -12,8 +12,8 @@ class MedicalRecordMedicine extends Model
     protected $table = 'medical_records_medicines';
 
     protected $fillable = [
-        'id_medical_record',
-        'id_medicine',
+        'medical_record_id',
+        'medicine_id',
         'amount',
     ];
 }
