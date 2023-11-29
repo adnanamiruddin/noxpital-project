@@ -19,8 +19,8 @@ class MedicalRecordsController extends Controller
     {
         if (Auth::check() && Auth::user()->role == 'dokter') {
             $patients = DB::table('users')
-                ->join('medical_records', 'users.id', '=', 'medical_records.id_patient')
-                ->join('users as doctors', 'medical_records.id_doctor', '=', 'doctors.id')
+                ->join('medical_records', 'users.id', '=', 'medical_records.patient_id')
+                ->join('users as doctors', 'medical_records.doctor_id', '=', 'doctors.id')
                 ->select('users.*', 'medical_records.*', 'doctors.name as doctor_name')
                 ->where('users.role', '=', 'pasien')
                 ->get();
@@ -46,11 +46,9 @@ class MedicalRecordsController extends Controller
     {
         if (Auth::check() && Auth::user()->role == 'dokter') {
             $request->validate([
-                // 'id_patient' => 'required',
                 'email_patient' => 'required|email|exists:users,email',
                 'action' => 'required',
             ], [
-                // 'id_patient.required' => 'Nama pasien harus diisi',
                 'email_patient.required' => 'Email pasien harus diisi',
                 'email_patient.email' => 'Email pasien harus berupa email',
                 'email_patient.exists' => 'Email pasien tidak ditemukan',
@@ -60,8 +58,8 @@ class MedicalRecordsController extends Controller
             $idPatient = User::where('email', $request->email_patient)->where('role', 'pasien')->firstOrFail();
 
             $data = [
-                'id_patient' => $idPatient->id,
-                'id_doctor' => Auth::user()->id,
+                'patient_id' => $idPatient->id,
+                'doctor_id' => Auth::user()->id,
                 'action' => $request->action,
             ];
 
@@ -91,8 +89,8 @@ class MedicalRecordsController extends Controller
                         }
 
                         $dataMedicine = [
-                            'id_medical_record' => $insertData->id,
-                            'id_medicine' => $medicine->id,
+                            'medical_record_id' => $insertData->id,
+                            'medicine_id' => $medicine->id,
                             'amount' => $item['amount'],
                         ];
                         MedicalRecordMedicine::create($dataMedicine);

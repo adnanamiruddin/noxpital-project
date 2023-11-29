@@ -39,7 +39,7 @@
                             {{ $no++ }}
                         </th>
                         <td class="px-6 py-4 text-center">
-                            {{ $item->id_patient }}
+                            {{ $item->patient_id }}
                         </td>
                         <td class="px-6 py-4">
                             {{ $item->name }}

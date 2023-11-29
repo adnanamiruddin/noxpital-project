@@ -20,10 +20,10 @@ class UsersController extends Controller
                 return view('dashboard.admin.user-list', compact('users'));
             } else if (Auth::user()->role == 'dokter') {
                 $users = DB::table('users')
-                    ->join('medical_records', 'users.id', '=', 'medical_records.id_patient')
+                    ->join('medical_records', 'users.id', '=', 'medical_records.patient_id')
                     ->select('*')
                     ->where('users.role', '=', 'pasien')
-                    ->where('medical_records.id_doctor', '=', Auth::user()->id)
+                    ->where('medical_records.doctor_id', '=', Auth::user()->id)
                     ->get();
                 return view('dashboard.dokter.patient-list', compact('users'));
             }

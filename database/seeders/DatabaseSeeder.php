@@ -4,7 +4,9 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Appointment;
 use App\Models\MedicalRecord;
+use App\Models\MedicalRecordMedicine;
 use App\Models\Medicine;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -64,7 +66,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'dokter2@gmail.com',
             'password' => bcrypt('12345678'),
             'role' => 'dokter',
-            'is_on_duty' => true,
+            'is_on_duty' => false,
         ]);
 
         User::create([
@@ -82,9 +84,9 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::factory(30)->create();
-
         Medicine::factory(30)->create();
-
         MedicalRecord::factory(50)->create();
+        MedicalRecordMedicine::factory(50)->create();
+        Appointment::factory(50)->create();
     }
 }

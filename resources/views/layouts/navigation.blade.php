@@ -85,17 +85,22 @@
                 </li>
 
                 <li>
-                    <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
-                        {{ __('Arahkan Pasien') }}
+                    <x-nav-link :href="route('appointments')" :active="request()->routeIs('appointments')">
+                        {{ __('Daftar Janjian') }}
                     </x-nav-link>
                 </li>
             @endif
-            </li>
 
             @if (Auth::check() && Auth::user()->role == 'dokter')
                 <li>
                     <x-nav-link :href="route('patient-list')" :active="request()->routeIs('patient-list')">
                         {{ __('Daftar Pasien') }}
+                    </x-nav-link>
+                </li>
+
+                <li>
+                    <x-nav-link :href="route('doctor-appointments')" :active="request()->routeIs('doctor-appointments')">
+                        {{ __('Daftar Janjian') }}
                     </x-nav-link>
                 </li>
             @endif

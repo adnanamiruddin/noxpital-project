@@ -16,7 +16,7 @@ class MedicinesController extends Controller
     {
         if (Auth::check() && Auth::user()->role == 'apoteker') {
             $medicines = DB::table('medicines')
-                ->join('users', 'medicines.id_apoteker', '=', 'users.id')
+                ->join('users', 'medicines.pharmacist_id', '=', 'users.id')
                 ->select('medicines.*', 'users.name as apoteker_name')
                 ->get();
             return view('dashboard.apoteker.medicines', compact('medicines'));
@@ -68,7 +68,7 @@ class MedicinesController extends Controller
                 'price' => $request->price,
                 'stock' => $request->stock,
                 'description' => $request->description,
-                'id_apoteker' => Auth::user()->id,
+                'pharmacist_id' => Auth::user()->id,
                 // 'image' => $request->image,
             ]);
             return redirect()->to('medicines')->with('success', 'Obat berhasil ditambahkan');
@@ -91,7 +91,7 @@ class MedicinesController extends Controller
         if (Auth::check() && Auth::user()->role == 'apoteker') {
             $selectedMedicine = Medicine::where('id', $id)->get();
             foreach ($selectedMedicine as $item) {
-                if (Auth::user()->id == $item->id_apoteker) {
+                if (Auth::user()->id == $item->pharmacist_id) {
                     return view('dashboard.apoteker.edit-medicine', compact('selectedMedicine'));
                 }
                 // return redirect()->to('medicines')->with('error', 'Anda tidak memiliki akses ke halaman ini');

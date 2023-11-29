@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppointmentsController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
@@ -70,6 +71,16 @@ Route::middleware('auth')->group(function () {
             'update' => 'user-list.update',
             'destroy' => 'user-list.destroy',
         ]);
+
+        Route::resource('appointments', AppointmentsController::class)->names([
+            'index' => 'appointments',
+            'create' => 'appointments.create',
+            'store' => 'appointments.store',
+            'show' => 'appointments.show',
+            'edit' => 'appointments.edit',
+            'update' => 'appointments.update',
+            'destroy' => 'appointments.destroy',
+        ]);
     });
 
     Route::middleware('apoteker')->group(function () {
@@ -95,6 +106,16 @@ Route::middleware('auth')->group(function () {
             'edit' => 'medical-records.edit',
             'update' => 'medical-records.update',
             'destroy' => 'medical-records.destroy',
+        ]);
+
+        Route::resource('doctor-appointments', AppointmentsController::class)->names([
+            'index' => 'doctor-appointments',
+            'create' => 'doctor-appointments.create',
+            'store' => 'doctor-appointments.store',
+            'show' => 'doctor-appointments.show',
+            'edit' => 'doctor-appointments.edit',
+            'update' => 'doctor-appointments.update',
+            'destroy' => 'doctor-appointments.destroy',
         ]);
     });
 });
