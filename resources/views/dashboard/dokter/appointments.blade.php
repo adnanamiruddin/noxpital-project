@@ -104,18 +104,18 @@
                             {{ $item->appointment_created_at }}
                         </td>
                         <td class="px-6 py-4 flex items-center">
-                            <form method="POST" action="{{ route('doctor-appointments') }}">
+                            <form method="POST" action="{{ url("doctor-appointments/$item->id") }}">
                                 @csrf
-                                <input type="hidden" name="appointment_id" value="{{ $item->id }}">
+                                @method('PUT')
                                 <button type="submit"
                                     class="focus:outline-none text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-1.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
                                     name="form_name" value="accept-appointment">
                                     Terima
                                 </button>
                             </form>
-                            <form method="POST" action="{{ route('doctor-appointments') }}">
+                            <form method="POST" action="{{ url("doctor-appointments/$item->id") }}">
                                 @csrf
-                                <input type="hidden" name="appointment_id" value="{{ $item->id }}">
+                                @method('PUT')
                                 <button type="submit"
                                     class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                                     name="form_name" value="reject-appointment">

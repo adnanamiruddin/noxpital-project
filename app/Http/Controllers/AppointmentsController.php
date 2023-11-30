@@ -45,15 +45,15 @@ class AppointmentsController extends Controller
                 return view('dashboard.dokter.appointments', compact('appointments'));
             } else if (Auth::user()->role == 'apoteker') {
                 $appointments = DB::table('appointments')
-                ->join('users', 'appointments.patient_id', '=', 'users.id')
-                ->where('appointments.doctor_id', Auth::user()->id)
-                ->orderBy('appointments.updated_at', 'desc')
-                ->select(
-                    'appointments.*',
-                    'users.name as patient_name',
-                    'users.email as patient_email',
-                    'appointments.created_at as appointment_created_at'
-                );
+                    ->join('users', 'appointments.patient_id', '=', 'users.id')
+                    ->where('appointments.doctor_id', Auth::user()->id)
+                    ->orderBy('appointments.updated_at', 'desc')
+                    ->select(
+                        'appointments.*',
+                        'users.name as patient_name',
+                        'users.email as patient_email',
+                        'appointments.created_at as appointment_created_at'
+                    );
                 return view('dashboard.apoteker.appointments', compact('appointments'));
             } else {
                 abort(401);
@@ -77,55 +77,28 @@ class AppointmentsController extends Controller
      */
     public function store(Request $request)
     {
-        if (Auth::check()) {
-            if (Auth::user()->role == 'admin') {
-                if ($request->form_name == 'create-appointment') {
-                    $patient = User::where('role', 'pasien')->where('email', $request->patient_email)->first();
-                    if (!$patient) {
-                        return redirect()->back()->with('error', 'Email pasien tidak ditemukan!');
-                    }
-
-                    $doctor = User::where('role', 'dokter')->where('email', $request->doctor_email)->first();
-                    if (!$doctor) {
-                        return redirect()->back()->with('error', 'Email dokter tidak ditemukan!');
-                    }
-                    if ($doctor->is_on_duty == false) {
-                        return redirect()->back()->with('error', 'Dokter tidak sedang bertugas!');
-                    }
-
-                    Appointment::create([
-                        'patient_id' => $patient->id,
-                        'doctor_id' => $doctor->id,
-                        'status' => 'menunggu',
-                    ]);
-                    return redirect()->back()->with('success', 'Janji temu berhasil dibuat!');
-                }
-            } else if (Auth::user()->role == 'dokter') {
-                if ($request->form_name == 'accept-appointment') {
-                    $appointment = Appointment::find($request->appointment_id);
-                    if ($appointment->status != 'menunggu') {
-                        return redirect()->back()->with('error', "Janji temu tidak sedang dalam status 'Menunggu'!");
-                    }
-                    $appointment->update([
-                        'status' => 'sedang konsultasi',
-                    ]);
-                    return redirect()->back()->with('success', 'Berhasil menyetujui janji temu!');
-                } else if ($request->form_name == 'reject-appointment') {
-                    $appointment = Appointment::find($request->appointment_id);
-                    if ($appointment->status != 'menunggu') {
-                        return redirect()->back()->with('error', "Janji temu tidak sedang dalam status 'Menunggu'!");
-                    }
-                    $appointment->update([
-                        'status' => 'ditolak',
-                    ]);
-                    return redirect()->back()->with('success', 'Berhasil menolak janji temu!');
-                } else {
-                    abort(400);
-                }
-            } else {
-                abort(401);
+        if (Auth::check() && Auth::user()->role == 'admin') {
+            $patient = User::where('role', 'pasien')->where('email', $request->patient_email)->first();
+            if (!$patient) {
+                return redirect()->back()->with('error', 'Email pasien tidak ditemukan!');
             }
+
+            $doctor = User::where('role', 'dokter')->where('email', $request->doctor_email)->first();
+            if (!$doctor) {
+                return redirect()->back()->with('error', 'Email dokter tidak ditemukan!');
+            }
+            if ($doctor->is_on_duty == false) {
+                return redirect()->back()->with('error', 'Dokter tidak sedang bertugas!');
+            }
+
+            Appointment::create([
+                'patient_id' => $patient->id,
+                'doctor_id' => $doctor->id,
+                'status' => 'menunggu',
+            ]);
+            return redirect()->back()->with('success', 'Janji temu berhasil dibuat!');
         }
+        abort(401);
     }
 
     /**
@@ -149,7 +122,32 @@ class AppointmentsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        if (Auth::user()->role == 'dokter') {
+            $appointment = Appointment::find($id);
+            if ($request->form_name == 'accept-appointment') {
+                if ($appointment->status != 'menunggu') {
+                    return redirect()->back()->with('error', "Janji temu tidak sedang dalam status 'Menunggu'!");
+                }
+                $appointment->update([
+                    'status' => 'sedang konsultasi',
+                ]);
+                return redirect()->back()->with('success', 'Berhasil menyetujui janji temu!');
+            } else if ($request->form_name == 'reject-appointment') {
+                if ($appointment->status == 'ditolak' || $appointment->status == 'selesai') {
+                    return redirect()->back()->with(
+                        'error',
+                        "Janji temu tidak sedang dalam status 'Menunggu' atau 'Sedang Konsultasi'!"
+                    );
+                }
+                $appointment->update([
+                    'status' => 'ditolak',
+                ]);
+                return redirect()->back()->with('success', 'Berhasil menolak janji temu!');
+            } else {
+                abort(404);
+            }
+        }
+        abort(401);
     }
 
     /**
