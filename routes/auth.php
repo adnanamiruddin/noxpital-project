@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\MedicalRecordsController;
 use App\Http\Controllers\MedicinesController;
+use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -91,6 +92,15 @@ Route::middleware('auth')->group(function () {
             'edit' => 'medicines.edit',
             'update' => 'medicines.update',
             'destroy' => 'medicines.destroy',
+        ]);
+        Route::resource('orders', OrdersController::class)->names([
+            'index' => 'orders',
+            'create' => 'orders.create',
+            'store' => 'orders.store',
+            'show' => 'orders.show',
+            'edit' => 'orders.edit',
+            'update' => 'orders.update',
+            'destroy' => 'orders.destroy',
         ]);
     });
 

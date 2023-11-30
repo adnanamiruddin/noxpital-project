@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('queue_number');
             $table->foreign('queue_number')->references('queue_number')->on('appointments')->onDelete('cascade');
             $table->integer('total_price');
+            $table->boolean('is_done')->default(false);
             $table->timestamps();
         });
     }

@@ -75,14 +75,13 @@
                             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                             {{ $no++ }}
                         </th>
-                        <td class="px-6 py-4 text-center">
+                        <td class="px-6 py-4">
                             {{ $item->id }}
                         </td>
-                        <td class="px-6 py-4 text-center">
+                        <td class="px-6 py-4">
                             {{ $item->name }}
                         </td>
                         <td class="px-6 py-4 text-justify">
-                            {{-- {{ substr($item->description, 0, 100) }}... --}}
                             {{ $item->description }}
                         </td>
                         <td class="px-6 py-4">

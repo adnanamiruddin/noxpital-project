@@ -119,7 +119,7 @@
                 </li>
 
                 <li>
-                    <x-nav-link :href="route('medicines')" :active="request()->routeIs('medicines')">
+                    <x-nav-link :href="route('orders')" :active="request()->routeIs('orders')">
                         {{ __('Daftar Pesanan') }}
                     </x-nav-link>
                 </li>

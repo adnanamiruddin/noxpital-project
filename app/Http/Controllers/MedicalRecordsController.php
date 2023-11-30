@@ -6,6 +6,7 @@ use App\Models\Appointment;
 use App\Models\MedicalRecord;
 use App\Models\MedicalRecordMedicine;
 use App\Models\Medicine;
+use App\Models\Order;
 use App\Models\User;
 use Error;
 use Illuminate\Http\Request;
@@ -88,34 +89,6 @@ class MedicalRecordsController extends Controller
             $data['created_at'] = $request->filled('created_at') ? $request->created_at : now();
             $insertData = MedicalRecord::create($data);
 
-            try {
-                $newestAppointmentData = DB::table('appointments')
-                    ->join('users', 'appointments.patient_id', '=', 'users.id')
-                    ->where('users.role', 'pasien')
-                    ->where('doctor_id', Auth::user()->id)
-                    ->where('status', 'sedang konsultasi')
-                    ->select('appointments.id as appointment_id', 'users.email as patient_email')
-                    ->orderBy('appointments.updated_at', 'desc')
-                    ->limit(1)
-                    ->first();
-
-                if ($newestAppointmentData->patient_email == $request->email_patient) {
-                    Appointment::find($newestAppointmentData->appointment_id)->update([
-                        'status' => 'selesai',
-                        'queue_number' => $this->generate_queue_number(),
-                        'medical_record_id' => $insertData->id,
-                    ]);
-                } else {
-                    throw new Error();
-                }
-            } catch (\Throwable $th) {
-                MedicalRecord::where('id', $insertData->id)->delete();
-                return redirect()->back()->with(
-                    'error',
-                    'Terjadi kesalahan pada sistem. Mohon input email pasien sesuai dengan email pasien pada janji temu yang terakhir disetujui oleh dokter'
-                );
-            }
-
             $totalPrice = 0;
             if ($request->medicines) {
                 foreach ($request->medicines as $item) {
@@ -140,7 +113,40 @@ class MedicalRecordsController extends Controller
                     }
                 }
             }
-            
+
+            try {
+                $newestAppointmentData = DB::table('appointments')
+                    ->join('users', 'appointments.patient_id', '=', 'users.id')
+                    ->where('users.role', 'pasien')
+                    ->where('doctor_id', Auth::user()->id)
+                    ->where('status', 'sedang konsultasi')
+                    ->select('appointments.id as appointment_id', 'users.email as patient_email')
+                    ->orderBy('appointments.updated_at', 'desc')
+                    ->limit(1)
+                    ->first();
+
+                if ($newestAppointmentData->patient_email == $request->email_patient) {
+                    $appointment = Appointment::find($newestAppointmentData->appointment_id);
+                    $appointment->update([
+                        'status' => 'selesai',
+                        'queue_number' => $this->generate_queue_number(),
+                        'medical_record_id' => $insertData->id,
+                    ]);
+                    Order::create([
+                        'medical_record_id' => $insertData->id,
+                        'queue_number' => $appointment->queue_number,
+                        'total_price' => $totalPrice,
+                    ]);
+                } else {
+                    throw new Error();
+                }
+            } catch (\Throwable $th) {
+                MedicalRecord::where('id', $insertData->id)->delete();
+                return redirect()->back()->with(
+                    'error',
+                    'Terjadi kesalahan pada sistem. Mohon input email pasien sesuai dengan email pasien pada janji temu yang terakhir disetujui oleh dokter'
+                );
+            }
 
             return redirect()->to('medical-records')->with('success', 'Berhasil menambahkan data rekam medis');
         }
