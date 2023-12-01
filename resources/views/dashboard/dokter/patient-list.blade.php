@@ -30,6 +30,9 @@
                     <th scope="col" class="px-6 py-3">
                         Dilayani Pada Tanggal
                     </th>
+                    <th scope="col" class="px-6 py-3">
+                        Dilayani Oleh
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -58,6 +61,9 @@
                         </td>
                         <td class="px-6 py-4">
                             {{ $item->medical_record_created_at }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ $item->doctor_name }}
                         </td>
                     </tr>
                 @endforeach

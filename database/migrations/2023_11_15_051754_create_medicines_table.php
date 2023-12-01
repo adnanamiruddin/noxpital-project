@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->text('description');
+            $table->text('image')->nullable();
             $table->enum('type', ['keras', 'biasa'])->default('biasa');
             $table->integer('stock');
             $table->integer('price');

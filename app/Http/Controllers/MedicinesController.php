@@ -42,26 +42,33 @@ class MedicinesController extends Controller
     {
         if (Auth::check() && Auth::user()->role == 'apoteker') {
             $request->validate([
-                'name' => 'required',
+                'name' => 'required|unique:medicines',
                 'type' => 'required',
                 'price' => 'required|numeric',
                 'stock' => 'required|numeric',
                 'description' => 'required',
-                // 'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+                'image' => 'image|mimes:jpeg,png,jpg|max:2048',
             ], [
                 'name.required' => 'Nama obat harus diisi',
+                'name.unique' => 'Nama obat sudah ada',
                 'type.required' => 'Tipe obat harus diisi',
                 'price.required' => 'Harga harus diisi',
                 'price.numeric' => 'Harga harus berupa angka',
                 'stock.required' => 'Stok harus diisi',
                 'stock.numeric' => 'Stok harus berupa angka',
                 'description.required' => 'Deskripsi harus diisi',
-                // 'image.required' => 'Gambar harus diisi',
-                // 'image.image' => 'Gambar harus berupa gambar',
-                // 'image.mimes' => 'Gambar harus berupa file jpeg, png, jpg',
-                // 'image.max' => 'Gambar maksimal 2MB',
+                'image.image' => 'File harus berupa gambar',
+                'image.mimes' => 'Format gambar harus jpeg, png, atau jpg',
+                'image.max' => 'Ukuran gambar tidak boleh lebih dari 2MB',
             ]);
 
+            // Upload gambar jika ada
+            $imagePath = null;
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('medicine_images', 'public');
+            }
+
+            // Simpan data obat ke database
             Medicine::create([
                 'name' => $request->name,
                 'type' => $request->type,
@@ -69,9 +76,10 @@ class MedicinesController extends Controller
                 'stock' => $request->stock,
                 'description' => $request->description,
                 'pharmacist_id' => Auth::user()->id,
-                // 'image' => $request->image,
+                'image' => $imagePath,
             ]);
-            return redirect()->to('medicines')->with('success', 'Obat berhasil ditambahkan');
+
+            return redirect()->route('medicines')->with('success', 'Obat berhasil ditambahkan');
         }
     }
 

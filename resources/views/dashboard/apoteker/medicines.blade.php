@@ -41,6 +41,9 @@
                         Terakhir Diubah
                     </th>
                     <th scope="col" class="px-6 py-3">
+                        Gambar Obat
+                    </th>
+                    <th scope="col" class="px-6 py-3">
                         Aksi
                     </th>
                 </tr>
@@ -74,6 +77,15 @@
                         </td>
                         <td class="px-6 py-4">
                             {{ $item->medicines_updated_at }}
+                        </td>
+                        <td class="px-6 py-4">
+                            @if ($item->image == null)
+                                <img src="{{ asset('storage/medicine_images/default_medicine_image.png') }}"
+                                    alt="{{ $item->name }}" class="w-20 h-20 object-cover rounded-lg">
+                            @else
+                                <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->name }}"
+                                    class="w-20 h-20 object-cover rounded-lg">
+                            @endif
                         </td>
                         <td class="px-6 py-4 flex items-center">
                             @if (Auth::user()->id == $item->pharmacist_id)

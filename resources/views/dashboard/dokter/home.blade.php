@@ -7,7 +7,7 @@
 @section('content')
     <h1 class="mb-8 font-bold text-2xl">Daftar 5 Pasien Terbaru yang Telah Diperiksa</h1>
 
-    <div class="mb-4 relative overflow-x-auto shadow-md sm:rounded-lg">
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
@@ -59,7 +59,7 @@
                             {{ $item->medical_record_created_at }}
                         </td>
                         <td class="px-6 py-4 flex items-center">
-                            <a href="/patient-list/{{ $item->id }}/edit"
+                            <a href="/medical-records/{{ $item->medical_record_id }}"
                                 class="focus:outline-none text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 me-2 mb-2 dark:focus:ring-blue-900">
                                 Selengkapnya
                             </a>

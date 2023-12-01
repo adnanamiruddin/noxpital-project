@@ -13,7 +13,7 @@
                 class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
                 << </a>
                     <h3 class="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-                        Data {{ $item->name }}
+                        Data Obat "{{ $item->name }}"
                     </h3>
                     <button data-modal-target="popup-modal" data-modal-toggle="popup-modal"
                         class="block text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
@@ -55,6 +55,16 @@
                         </div>
                     </div>
         </form>
+
+        <div class="flex justify-center items-center">
+            @if ($item->image == null)
+                <img src="{{ asset('storage/medicine_images/default_medicine_image.png') }}" alt="{{ $item->name }}"
+                    class="w-48 object-cover rounded-xl">
+            @else
+                <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->name }}"
+                    class="w-48 object-cover rounded-xl">
+            @endif
+        </div>
 
         <form method="POST" action="{{ url("/medicines/$item->id") }}">
             @csrf

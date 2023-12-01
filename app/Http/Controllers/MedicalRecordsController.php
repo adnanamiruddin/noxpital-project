@@ -157,31 +157,57 @@ class MedicalRecordsController extends Controller
      */
     public function show(string $id)
     {
-        if (Auth::check() && Auth::user()->role == 'pasien') {
-            $medicalRecord = DB::table('medical_records')
-                ->join('users', 'medical_records.doctor_id', '=', 'users.id')
-                ->where('medical_records.patient_id', '=', Auth::user()->id)
-                ->where('medical_records.id', '=', $id)
-                ->select('medical_records.*', 'users.name as doctor_name')
-                ->first();
-
-            if ($medicalRecord) {
-                $medicines = DB::table('medical_records')
-                    ->join(
-                        'medical_records_medicines',
-                        'medical_records.id',
-                        '=',
-                        'medical_records_medicines.medical_record_id'
-                    )
-                    ->join('medicines', 'medical_records_medicines.medicine_id', '=', 'medicines.id')
+        if (Auth::check()) {
+            if (Auth::user()->role == 'pasien') {
+                $medicalRecord = DB::table('medical_records')
+                    ->join('users', 'medical_records.doctor_id', '=', 'users.id')
+                    ->where('medical_records.patient_id', '=', Auth::user()->id)
                     ->where('medical_records.id', '=', $id)
-                    ->select(
-                        'medicines.*',
-                        'medical_records_medicines.amount as amount'
-                    )
-                    ->get();
+                    ->select('medical_records.*', 'users.name as doctor_name')
+                    ->first();
 
-                return view('dashboard.pasien.detail-medical-record', compact('medicalRecord', 'medicines'));
+                if ($medicalRecord) {
+                    $medicines = DB::table('medical_records')
+                        ->join(
+                            'medical_records_medicines',
+                            'medical_records.id',
+                            '=',
+                            'medical_records_medicines.medical_record_id'
+                        )
+                        ->join('medicines', 'medical_records_medicines.medicine_id', '=', 'medicines.id')
+                        ->where('medical_records.id', '=', $id)
+                        ->select(
+                            'medicines.*',
+                            'medical_records_medicines.amount as amount'
+                        )
+                        ->get();
+                    return view('dashboard.pasien.detail-medical-record', compact('medicalRecord', 'medicines'));
+                }
+            } else if (Auth::user()->role == 'dokter') {
+                $medicalRecord = DB::table('medical_records')
+                    ->join('users', 'medical_records.patient_id', '=', 'users.id')
+                    ->where('medical_records.doctor_id', '=', Auth::user()->id)
+                    ->where('medical_records.id', '=', $id)
+                    ->select('medical_records.*', 'users.email as patient_email')
+                    ->first();
+
+                if ($medicalRecord) {
+                    $medicines = DB::table('medical_records')
+                        ->join(
+                            'medical_records_medicines',
+                            'medical_records.id',
+                            '=',
+                            'medical_records_medicines.medical_record_id'
+                        )
+                        ->join('medicines', 'medical_records_medicines.medicine_id', '=', 'medicines.id')
+                        ->where('medical_records.id', '=', $id)
+                        ->select(
+                            'medicines.*',
+                            'medical_records_medicines.amount as amount'
+                        )
+                        ->get();
+                    return view('dashboard.dokter.detail-medical-record', compact('medicalRecord', 'medicines'));
+                }
             }
             abort(404);
         }

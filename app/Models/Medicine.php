@@ -12,9 +12,10 @@ class Medicine extends Model
     protected $fillable = [
         'name',
         'description',
+        'image',
         'type',
         'stock',
         'price',
-        'pharmacists_id',
+        'pharmacist_id',
     ];
 }
