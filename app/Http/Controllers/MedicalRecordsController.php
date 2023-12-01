@@ -166,10 +166,19 @@ class MedicalRecordsController extends Controller
                 ->first();
 
             if ($medicalRecord) {
-                $medicines = DB::table('medical_records_medicines')
+                $medicines = DB::table('medical_records')
+                    ->join(
+                        'medical_records_medicines',
+                        'medical_records.id',
+                        '=',
+                        'medical_records_medicines.medical_record_id'
+                    )
                     ->join('medicines', 'medical_records_medicines.medicine_id', '=', 'medicines.id')
-                    ->where('medical_records_medicines.medical_record_id', '=', $id)
-                    ->select('medicines.*', 'medical_records_medicines.amount as amount')
+                    ->where('medical_records.id', '=', $id)
+                    ->select(
+                        'medicines.*',
+                        'medical_records_medicines.amount as amount'
+                    )
                     ->get();
 
                 return view('dashboard.pasien.detail-medical-record', compact('medicalRecord', 'medicines'));
@@ -183,7 +192,33 @@ class MedicalRecordsController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        if (Auth::check() && Auth::user()->role == 'dokter') {
+            $medicalRecord = DB::table('medical_records')
+                ->join('users', 'medical_records.patient_id', '=', 'users.id')
+                ->where('medical_records.doctor_id', '=', Auth::user()->id)
+                ->where('medical_records.id', '=', $id)
+                ->select('medical_records.*', 'users.email as patient_email')
+                ->first();
+
+            if ($medicalRecord) {
+                $medicines = DB::table('medical_records')
+                    ->join(
+                        'medical_records_medicines',
+                        'medical_records.id',
+                        '=',
+                        'medical_records_medicines.medical_record_id'
+                    )
+                    ->join('medicines', 'medical_records_medicines.medicine_id', '=', 'medicines.id')
+                    ->where('medical_records.id', '=', $id)
+                    ->select(
+                        'medicines.*',
+                        'medical_records_medicines.amount as amount'
+                    )
+                    ->get();
+                return view('dashboard.dokter.edit-medical-record', compact('medicalRecord', 'medicines'));
+            }
+            abort(404);
+        }
     }
 
     /**
@@ -191,7 +226,18 @@ class MedicalRecordsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        if (Auth::check() && Auth::user()->role == 'dokter') {
+            $request->validate([
+                'action' => 'required',
+            ], [
+                'action.required' => 'Tindakan harus diisi',
+            ]);
+
+            MedicalRecord::find($id)->update([
+                'action' => $request->action,
+            ]);
+            return redirect()->to('medical-records')->with('success', 'Berhasil mengubah data rekam medis');
+        }
     }
 
     /**

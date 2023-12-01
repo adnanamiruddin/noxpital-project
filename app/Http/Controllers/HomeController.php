@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -17,7 +17,20 @@ class HomeController extends Controller
             } elseif (Auth::user()->role == 'pasien') {
                 return view('dashboard.pasien.home');
             } elseif (Auth::user()->role == 'dokter') {
-                return view('dashboard.dokter.home');
+                $patients = DB::table('users')
+                    ->join('medical_records', 'users.id', '=', 'medical_records.patient_id')
+                    ->where('users.role', '=', 'pasien')
+                    ->where('medical_records.doctor_id', '=', Auth::user()->id)
+                    ->select(
+                        'users.*',
+                        'medical_records.id as medical_record_id',
+                        'medical_records.action as action',
+                        'medical_records.created_at as medical_record_created_at'
+                    )
+                    ->orderBy('medical_records.updated_at', 'desc')
+                    ->limit(5)
+                    ->get();
+                return view('dashboard.dokter.home', compact('patients'));
             } elseif (Auth::user()->role == 'apoteker') {
                 return view('dashboard.apoteker.home');
             }

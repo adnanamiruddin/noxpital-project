@@ -22,13 +22,13 @@
                         Email
                     </th>
                     <th scope="col" class="px-6 py-3">
+                        Id Rekam Medis
+                    </th>
+                    <th scope="col" class="px-6 py-3">
                         Tindakan
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Dilayani Pada Tanggal
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Aksi
                     </th>
                 </tr>
             </thead>
@@ -42,7 +42,7 @@
                             {{ $no++ }}
                         </th>
                         <td class="px-6 py-4 text-center">
-                            {{ $item->patient_id }}
+                            {{ $item->id }}
                         </td>
                         <td class="px-6 py-4">
                             {{ $item->name }}
@@ -50,17 +50,14 @@
                         <td class="px-6 py-4">
                             {{ $item->email }}
                         </td>
+                        <td class="px-6 py-4 text-center">
+                            {{ $item->medical_record_id }}
+                        </td>
                         <td class="px-6 py-4">
                             {{ substr($item->action, 0, 100) }}...
                         </td>
                         <td class="px-6 py-4">
                             {{ $item->medical_record_created_at }}
-                        </td>
-                        <td class="px-6 py-4 flex items-center">
-                            <a href="/patient-list/{{ $item->patient_id }}/edit"
-                                class="focus:outline-none text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 me-2 mb-2 dark:focus:ring-blue-900">
-                                Selengkapnya
-                            </a>
                         </td>
                     </tr>
                 @endforeach

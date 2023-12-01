@@ -43,18 +43,6 @@ class AppointmentsController extends Controller
                     )
                     ->get();
                 return view('dashboard.dokter.appointments', compact('appointments'));
-            } else if (Auth::user()->role == 'apoteker') {
-                $appointments = DB::table('appointments')
-                    ->join('users', 'appointments.patient_id', '=', 'users.id')
-                    ->where('appointments.doctor_id', Auth::user()->id)
-                    ->orderBy('appointments.updated_at', 'desc')
-                    ->select(
-                        'appointments.*',
-                        'users.name as patient_name',
-                        'users.email as patient_email',
-                        'appointments.created_at as appointment_created_at'
-                    );
-                return view('dashboard.apoteker.appointments', compact('appointments'));
             } else {
                 abort(401);
             }
@@ -78,6 +66,18 @@ class AppointmentsController extends Controller
     public function store(Request $request)
     {
         if (Auth::check() && Auth::user()->role == 'admin') {
+            $request->validate([
+                'patient_email' => 'required|email',
+                'patient_complaints' => 'required',
+                'doctor_email' => 'required|email',
+            ], [
+                'patient_email.required' => 'Email pasien tidak boleh kosong!',
+                'patient_email.email' => 'Email pasien tidak valid!',
+                'patient_complaints.required' => 'Keluhan pasien tidak boleh kosong!',
+                'doctor_email.required' => 'Email dokter tidak boleh kosong!',
+                'doctor_email.email' => 'Email dokter tidak valid!',
+            ]);
+
             $patient = User::where('role', 'pasien')->where('email', $request->patient_email)->first();
             if (!$patient) {
                 return redirect()->back()->with('error', 'Email pasien tidak ditemukan!');
@@ -88,12 +88,13 @@ class AppointmentsController extends Controller
                 return redirect()->back()->with('error', 'Email dokter tidak ditemukan!');
             }
             if ($doctor->is_on_duty == false) {
-                return redirect()->back()->with('error', 'Dokter tidak sedang bertugas!');
+                return redirect()->back()->with('error', 'Dokter sedang tidak bertugas hari ini!');
             }
 
             Appointment::create([
                 'patient_id' => $patient->id,
                 'doctor_id' => $doctor->id,
+                'patient_complaints' => $request->patient_complaints,
                 'status' => 'menunggu',
             ]);
             return redirect()->back()->with('success', 'Janji temu berhasil dibuat!');

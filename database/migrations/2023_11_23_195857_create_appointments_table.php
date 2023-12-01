@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('patient_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('doctor_id')->constrained('users')->onDelete('cascade');
+            $table->text('patient_complaints');
             $table->enum('status', ['menunggu', 'sedang konsultasi', 'selesai', 'ditolak'])->default('menunggu');
             $table->string('queue_number')->unique()->nullable();
             $table->foreignId('medical_record_id')->nullable()->constrained('medical_records')->onDelete('cascade');

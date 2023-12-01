@@ -23,7 +23,12 @@ class UsersController extends Controller
                     ->join('medical_records', 'users.id', '=', 'medical_records.patient_id')
                     ->where('users.role', '=', 'pasien')
                     ->where('medical_records.doctor_id', '=', Auth::user()->id)
-                    ->select('*', 'medical_records.created_at as medical_record_created_at')
+                    ->select(
+                        'users.*',
+                        'medical_records.id as medical_record_id',
+                        'medical_records.action as action',
+                        'medical_records.created_at as medical_record_created_at'
+                    )
                     ->orderBy('medical_records.updated_at', 'desc')
                     ->get();
                 return view('dashboard.dokter.patient-list', compact('users'));
