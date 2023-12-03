@@ -4,6 +4,10 @@
     Daftar User
 @endsection
 
+@section('search_form')
+    @include('components.search-form', ['action' => route('user-list.search')])
+@endsection
+
 @section('content')
     <div class="mb-8">
         <a href="{{ route('user-list.create') }}"
@@ -93,5 +97,9 @@
                 @endforeach
             </tbody>
         </table>
+
+        <div class="p-4">
+            {{ $users->withQueryString()->links() }}
+        </div>
     </div>
 @endsection

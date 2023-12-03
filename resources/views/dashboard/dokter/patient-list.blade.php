@@ -6,7 +6,6 @@
 
 @section('search_form')
     @include('components.search-form', ['action' => route('patient-list.search')])
-    {{-- @include('components.search-form') --}}
 @endsection
 
 @section('content')
@@ -74,5 +73,9 @@
                 @endforeach
             </tbody>
         </table>
+
+        <div class="p-4">
+            {{ $users->withQueryString()->links() }}
+        </div>
     </div>
 @endsection

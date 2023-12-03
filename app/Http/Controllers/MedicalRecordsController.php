@@ -223,7 +223,11 @@ class MedicalRecordsController extends Controller
                 ->join('users', 'medical_records.patient_id', '=', 'users.id')
                 ->where('medical_records.doctor_id', '=', Auth::user()->id)
                 ->where('medical_records.id', '=', $id)
-                ->select('medical_records.*', 'users.email as patient_email')
+                ->select(
+                    'medical_records.*',
+                    'users.name as patient_name',
+                    'users.email as patient_email'
+                )
                 ->first();
 
             if ($medicalRecord) {
@@ -271,7 +275,11 @@ class MedicalRecordsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        if (Auth::check() && Auth::user()->role == 'dokter') {
+            MedicalRecord::find($id)->delete();
+            MedicalRecordMedicine::where('medical_record_id', $id)->delete();
+            return redirect()->to('medical-records')->with('success', "Data rekam medis dengan Id $id berhasil dihapus");
+        }
     }
 
     private function generate_queue_number()

@@ -12,13 +12,29 @@ class MedicinesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         if (Auth::check() && Auth::user()->role == 'apoteker') {
             $medicines = DB::table('medicines')
                 ->join('users', 'medicines.pharmacist_id', '=', 'users.id')
-                ->select('medicines.*', 'users.name as apoteker_name', 'medicines.updated_at as medicines_updated_at')
-                ->get();
+                ->select('medicines.*', 'users.name as pharmacist_name', 'medicines.updated_at as medicines_updated_at')
+                ->paginate(20);
+
+            if ($request->search_keywords) {
+                $searchKeywords = $request->search_keywords;
+
+                $medicines = DB::table('medicines')
+                    ->join('users', 'medicines.pharmacist_id', '=', 'users.id')
+                    ->where('medicines.name', 'like', "%$searchKeywords%")
+                    ->orWhere('medicines.stock', 'like', "%$searchKeywords%")
+                    ->orWhere('medicines.price', 'like', "%$searchKeywords%")
+                    ->orWhere('medicines.type', 'like', "%$searchKeywords%")
+                    ->orWhere('users.name', 'like', "%$searchKeywords%")
+                    ->orWhere('users.updated_at', 'like', "%$searchKeywords%")
+                    ->select('medicines.*', 'users.name as pharmacist_name', 'medicines.updated_at as medicines_updated_at')
+                    ->paginate(20);
+            }
+
             return view('dashboard.apoteker.medicines', compact('medicines'));
         }
         abort(401);
@@ -62,13 +78,11 @@ class MedicinesController extends Controller
                 'image.max' => 'Ukuran gambar tidak boleh lebih dari 2MB',
             ]);
 
-            // Upload gambar jika ada
             $imagePath = null;
             if ($request->hasFile('image')) {
                 $imagePath = $request->file('image')->store('medicine_images', 'public');
             }
 
-            // Simpan data obat ke database
             Medicine::create([
                 'name' => $request->name,
                 'type' => $request->type,
@@ -97,14 +111,12 @@ class MedicinesController extends Controller
     public function edit(string $id)
     {
         if (Auth::check() && Auth::user()->role == 'apoteker') {
-            $selectedMedicine = Medicine::where('id', $id)->get();
-            foreach ($selectedMedicine as $item) {
-                if (Auth::user()->id == $item->pharmacist_id) {
-                    return view('dashboard.apoteker.edit-medicine', compact('selectedMedicine'));
-                }
-                // return redirect()->to('medicines')->with('error', 'Anda tidak memiliki akses ke halaman ini');
-                abort(401);
+            $selectedMedicine = Medicine::where('id', $id)->first();
+            if (Auth::user()->id == $selectedMedicine->pharmacist_id) {
+                return view('dashboard.apoteker.edit-medicine', compact('selectedMedicine'));
             }
+            // return redirect()->to('medicines')->with('error', 'Anda tidak memiliki akses ke halaman ini');
+            abort(401);
         }
         abort(401);
     }
@@ -149,9 +161,9 @@ class MedicinesController extends Controller
      */
     public function destroy(string $id)
     {
-        if (Auth::check() && Auth::user()->role == 'apoteker') {
-            Medicine::where('id', $id)->delete();
-            return redirect()->to('medicines')->with('success', "Data obat dengan Id $id berhasil dihapus");
-        }
+        // if (Auth::check() && Auth::user()->role == 'apoteker') {
+        //     Medicine::find($id)->delete();
+        //     return redirect()->to('medicines')->with('success', "Data obat dengan Id $id berhasil dihapus");
+        // }
     }
 }

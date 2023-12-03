@@ -16,7 +16,17 @@ class UsersController extends Controller
     {
         if (Auth::check()) {
             if (Auth::user()->role == 'admin') {
-                $users = User::where('role', '!=', 'admin')->get();
+                $users = User::where('role', '!=', 'admin')->paginate(20);
+
+                if ($request->search_keywords) {
+                    $searchKeywords = $request->search_keywords;
+                    $users = User::where('role', '!=', 'admin')
+                        ->where('name', 'like', "%$searchKeywords%")
+                        ->orWhere('email', 'like', "%$searchKeywords%")
+                        ->orWhere('role', 'like', "%$searchKeywords%")
+                        ->paginate(20);
+                }
+
                 return view('dashboard.admin.user-list', compact('users'));
             } else if (Auth::user()->role == 'dokter') {
                 $users = DB::table('users')
@@ -31,7 +41,7 @@ class UsersController extends Controller
                         'medical_records.created_at as medical_record_created_at'
                     )
                     ->orderBy('medical_records.updated_at', 'desc')
-                    ->get();
+                    ->paginate(20);
 
                 if ($request->search_keywords) {
                     $searchKeywords = $request->search_keywords;
@@ -53,7 +63,7 @@ class UsersController extends Controller
                             'medical_records.created_at as medical_record_created_at'
                         )
                         ->orderBy('medical_records.updated_at', 'desc')
-                        ->get();
+                        ->paginate(20);
                 }
 
                 return view('dashboard.dokter.patient-list', compact('users'));
@@ -121,7 +131,7 @@ class UsersController extends Controller
      */
     public function edit(string $id)
     {
-        $selectedUser = User::where('id', $id)->get();
+        $selectedUser = User::find($id)->first();
         return view('dashboard.admin.edit-user', compact('selectedUser'));
     }
 
@@ -185,7 +195,7 @@ class UsersController extends Controller
     public function destroy(string $id)
     {
         if (Auth::check() && Auth::user()->role == 'admin') {
-            User::where('id', $id)->delete();
+            User::find($id)->delete();
             return redirect()->to('user-list')->with('success', "Data User dengan Id $id berhasil dihapus");
         }
     }

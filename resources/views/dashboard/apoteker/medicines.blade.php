@@ -4,6 +4,10 @@
     Daftar Obat
 @endsection
 
+@section('search_form')
+    @include('components.search-form', ['action' => route('medicines.search')])
+@endsection
+
 @section('content')
     <div class="mb-8">
         <a href="{{ route('medicines.create') }}"
@@ -73,7 +77,7 @@
                             {{ ucwords($item->type) }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $item->apoteker_name }}
+                            {{ $item->pharmacist_name }}
                         </td>
                         <td class="px-6 py-4">
                             {{ $item->medicines_updated_at }}
@@ -105,5 +109,9 @@
                 @endforeach
             </tbody>
         </table>
+
+        <div class="p-4">
+            {{ $medicines->withQueryString()->links() }}
+        </div>
     </div>
 @endsection

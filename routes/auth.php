@@ -72,6 +72,7 @@ Route::middleware('auth')->group(function () {
             'update' => 'user-list.update',
             'destroy' => 'user-list.destroy',
         ]);
+        Route::post('user-list', [UsersController::class, 'index'])->name('user-list.search');
         Route::resource('appointments', AppointmentsController::class)->names([
             'index' => 'appointments',
             'create' => 'appointments.create',
@@ -93,6 +94,7 @@ Route::middleware('auth')->group(function () {
             'update' => 'medicines.update',
             'destroy' => 'medicines.destroy',
         ]);
+        Route::post('medicines', [MedicinesController::class, 'index'])->name('medicines.search');
         Route::resource('orders', OrdersController::class)->names([
             'index' => 'orders',
             'create' => 'orders.create',

@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <h1 class="mb-8 font-bold text-2xl">Catatan Rekam Medis Terakhir Saya</h1>
+    <h1 class="mb-8 font-bold text-2xl">Catatan Rekam Medis Terbaru</h1>
 
     <div class="mb-6 flex justify-between items-center gap-3">
         <div class="w-6/12">
