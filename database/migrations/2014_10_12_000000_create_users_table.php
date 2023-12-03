@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('password');
             $table->enum("role", ["admin", "pasien", "dokter", "apoteker"])->default("pasien");
             $table->boolean("is_on_duty")->default(false)->nullable();
+            $table->string("specialist")->nullable();
+            $table->string("room_number")->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -69,6 +69,8 @@ class HomeController extends Controller
                     return view('dashboard.pasien.home', compact('medicalRecord', 'medicines'));
                 }
             } elseif (Auth::user()->role == 'dokter') {
+                $myData = User::find(Auth::user()->id);
+
                 $patients = DB::table('users')
                     ->join('medical_records', 'users.id', '=', 'medical_records.patient_id')
                     ->where('users.role', '=', 'pasien')
@@ -82,7 +84,7 @@ class HomeController extends Controller
                     ->orderBy('medical_records.updated_at', 'desc')
                     ->limit(5)
                     ->get();
-                return view('dashboard.dokter.home', compact('patients'));
+                return view('dashboard.dokter.home', compact('myData', 'patients'));
             } elseif (Auth::user()->role == 'apoteker') {
                 $medicines = DB::table('medical_records')
                     ->join('medical_records_medicines', 'medical_records.id', '=', 'medical_records_medicines.medical_record_id')

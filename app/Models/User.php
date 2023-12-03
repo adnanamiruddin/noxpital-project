@@ -23,6 +23,8 @@ class User extends Authenticatable
         'password',
         'role',
         'is_on_duty',
+        'specialist',
+        'room_number',
     ];
 
     /**

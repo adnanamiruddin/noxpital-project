@@ -106,32 +106,40 @@ class UsersController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        if (Auth::check() && Auth::user()->role == 'admin') {
-            $request->validate([
-                'name' => 'required',
-                'email' => "required|email|unique:users,email,$id",
-                'role' => 'required',
-            ], [
-                'name.required' => 'Nama harus diisi',
-                'email.required' => 'Email harus diisi',
-                'email.email' => 'Email tidak valid',
-                'email.unique' => 'Email sudah terdaftar',
-                'role.required' => 'Role harus diisi',
-            ]);
+        if (Auth::check()) {
+            if (Auth::user()->role == 'admin') {
+                $request->validate([
+                    'name' => 'required',
+                    'email' => "required|email|unique:users,email,$id",
+                    'role' => 'required',
+                ], [
+                    'name.required' => 'Nama harus diisi',
+                    'email.required' => 'Email harus diisi',
+                    'email.email' => 'Email tidak valid',
+                    'email.unique' => 'Email sudah terdaftar',
+                    'role.required' => 'Role harus diisi',
+                ]);
 
-            $data = [
-                'name' => $request->name,
-                'email' => $request->email,
-                'role' => $request->role,
-            ];
+                $data = [
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'role' => $request->role,
+                ];
 
-            if ($request->password) {
-                $data['password'] = bcrypt($request->password);
+                if ($request->password) {
+                    $data['password'] = bcrypt($request->password);
+                }
+
+                User::find($id)->update($data);
+                return redirect()->to('user-list')->with('success', 'Data berhasil diubah');
+            } else if (Auth::user()->role == 'dokter') {
+                User::find($id)->update([
+                    'is_on_duty' => $request->is_on_duty
+                ]);
+                return redirect()->back()->with('success', 'Status sedang bekerja berhasil diperbarui');
             }
-
-            User::where('id', $id)->update($data);
-            return redirect()->to('user-list')->with('success', 'Data berhasil diubah');
         }
+        abort(401);
     }
 
     /**

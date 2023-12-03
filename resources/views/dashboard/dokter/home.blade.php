@@ -5,6 +5,27 @@
 @endsection
 
 @section('content')
+    <form method="POST" action="{{ url("doctor/$myData->id") }}" class="mb-8 flex flex-col w-3/12">
+        @csrf
+        @method('PUT')
+        <h1 class="mb-4 font-bold text-2xl">Status Sedang Bekerja</h1>
+
+        <label class="relative inline-flex items-center cursor-pointer">
+            <input type="hidden" name="is_on_duty" value="0">
+            <input type="checkbox" name="is_on_duty" value="1" class="sr-only peer"
+                {{ $myData->is_on_duty ? 'checked' : '' }}>
+            <div
+                class="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+            </div>
+            <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Masuk Kerja</span>
+        </label>
+
+        <button type="submit"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-3 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            Perbarui
+        </button>
+    </form>
+
     <h1 class="mb-8 font-bold text-2xl">Daftar 5 Pasien Terbaru yang Telah Diperiksa</h1>
 
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">

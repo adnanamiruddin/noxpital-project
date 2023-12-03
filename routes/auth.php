@@ -125,6 +125,8 @@ Route::middleware('auth')->group(function () {
             'update' => 'doctor-appointments.update',
             'destroy' => 'doctor-appointments.destroy',
         ]);
+
+        Route::put('doctor/{id}', [UsersController::class, 'update'])->name('doctor');
     });
 
     Route::middleware('pasien')->group(function () {
