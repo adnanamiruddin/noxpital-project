@@ -12,7 +12,7 @@ class UsersController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         if (Auth::check()) {
             if (Auth::user()->role == 'admin') {
@@ -32,6 +32,30 @@ class UsersController extends Controller
                     )
                     ->orderBy('medical_records.updated_at', 'desc')
                     ->get();
+
+                if ($request->search_keywords) {
+                    $searchKeywords = $request->search_keywords;
+                    $users = DB::table('users')
+                        ->join('medical_records', 'users.id', '=', 'medical_records.patient_id')
+                        ->join('users as doctors', 'medical_records.doctor_id', '=', 'doctors.id')
+                        ->where('users.role', '=', 'pasien')
+                        ->where('users.name', 'like', "%$searchKeywords%")
+                        ->orWhere('users.email', 'like', "%$searchKeywords%")
+                        ->orWhere('users.specialist', 'like', "%$searchKeywords%")
+                        ->orWhere('users.room_number', 'like', "%$searchKeywords%")
+                        ->orWhere('doctors.name', 'like', "%$searchKeywords%")
+                        ->orWhere('medical_records.action', 'like', "%$searchKeywords%")
+                        ->select(
+                            'users.*',
+                            'doctors.name as doctor_name',
+                            'medical_records.id as medical_record_id',
+                            'medical_records.action as action',
+                            'medical_records.created_at as medical_record_created_at'
+                        )
+                        ->orderBy('medical_records.updated_at', 'desc')
+                        ->get();
+                }
+
                 return view('dashboard.dokter.patient-list', compact('users'));
             }
         }
@@ -133,10 +157,23 @@ class UsersController extends Controller
                 User::find($id)->update($data);
                 return redirect()->to('user-list')->with('success', 'Data berhasil diubah');
             } else if (Auth::user()->role == 'dokter') {
+                if ($request->is_on_duty == true && $request->room_number == null) {
+                    return redirect()->back()->with('error', 'Nomor ruangan harus diisi jika sedang bekerja');
+                }
+
+                if ($request->is_on_duty == false && $request->room_number != null) {
+                    return redirect()->back()->with(
+                        'error',
+                        'Gagal memperbarui data. Jangan mengisi nomor ruangan jika sedang tidak bekerja'
+                    );
+                }
+
+                $roomNumber = $request->is_on_duty == true ? $request->room_number : null;
                 User::find($id)->update([
-                    'is_on_duty' => $request->is_on_duty
+                    'is_on_duty' => $request->is_on_duty,
+                    'room_number' => $roomNumber,
                 ]);
-                return redirect()->back()->with('success', 'Status sedang bekerja berhasil diperbarui');
+                return redirect()->back()->with('success', 'Status sedang bekerja dan nomor ruangan berhasil diperbarui');
             }
         }
         abort(401);

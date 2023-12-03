@@ -26,6 +26,12 @@
                         Email
                     </th>
                     <th scope="col" class="px-6 py-3">
+                        Spesialis
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Nomor Ruangan
+                    </th>
+                    <th scope="col" class="px-6 py-3">
                         Status
                     </th>
                 </tr>
@@ -46,6 +52,12 @@
                         </td>
                         <td class="px-6 py-4">
                             {{ $item->email }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ $item->specialist }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ $item->room_number }}
                         </td>
                         <td class="px-6 py-4">
                             <span
