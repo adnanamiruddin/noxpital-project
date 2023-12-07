@@ -26,9 +26,10 @@ class AppointmentsController extends Controller
                         'users.name as patient_name',
                         'users.email as patient_email',
                         'doctors.name as doctor_name',
+                        'doctors.room_number as doctor_room_number',
                         'appointments.created_at as appointment_created_at'
                     )
-                    ->get();
+                    ->paginate(20);
                 return view('dashboard.admin.appointments', compact('appointments'));
             } else if (Auth::user()->role == 'dokter') {
                 $appointments = DB::table('appointments')
@@ -41,7 +42,7 @@ class AppointmentsController extends Controller
                         'users.email as patient_email',
                         'appointments.created_at as appointment_created_at'
                     )
-                    ->get();
+                    ->paginate(20);
                 return view('dashboard.dokter.appointments', compact('appointments'));
             } else {
                 abort(401);

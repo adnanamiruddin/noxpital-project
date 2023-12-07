@@ -19,25 +19,25 @@
 
         <ul class="flex justify-end text-white">
             <li>
-                <a href="#" target="_blank" rel="noopener">
+                <a href="https://www.instagram.com/muh.adnan_putra/" target="_blank" rel="noopener">
                     <ion-icon name="logo-instagram" class="w-6 h-6 fill-current text-white"></ion-icon>
                 </a>
             </li>
 
             <li class="ml-6">
-                <a href="#" target="_blank" rel="noopener">
+                <a href="wa.me/+6281245255702" target="_blank" rel="noopener">
                     <ion-icon name="logo-whatsapp" class="w-6 h-6 fill-current text-white"></ion-icon>
                 </a>
             </li>
 
             <li class="ml-6">
-                <a href="#" target="_blank" rel="noopener">
+                <a href="https://www.linkedin.com/in/muh-adnan-putra-amiruddin/" target="_blank" rel="noopener">
                     <ion-icon name="logo-linkedin" class="w-6 h-6 fill-current text-white"></ion-icon>
                 </a>
             </li>
 
             <li class="ml-6">
-                <a href="#" target="_blank" rel="noopener">
+                <a href="https://adnan-task1web.vercel.app/" target="_blank" rel="noopener">
                     <ion-icon name="logo-web-component" class="w-6 h-6 fill-current text-white"></ion-icon>
                 </a>
             </li>
@@ -63,27 +63,27 @@
                 class="w-full bg-white md:bg-transparent rounded shadow-lg px-6 py-4 mt-4 text-center md:p-0 md:mt-0 md:shadow-none">
                 <ul class="md:flex items-center">
                     <li>
-                        <a class="py-2 inline-block md:text-white md:hidden lg:block font-semibold" href="#">
+                        <a class="py-2 inline-block md:text-white md:hidden lg:block font-semibold" href="#home">
                             Beranda
                         </a>
                     </li>
                     <li class="md:ml-4">
-                        <a class="py-2 inline-block md:text-white md:px-2 font-semibold" href="#">
+                        <a class="py-2 inline-block md:text-white md:px-2 font-semibold" href="#about">
                             Tentang Kami
                         </a>
                     </li>
                     <li class="md:ml-4">
-                        <a class="py-2 inline-block md:text-white md:px-2 font-semibold" href="#">
-                            Layanan
+                        <a class="py-2 inline-block md:text-white md:px-2 font-semibold" href="#vision">
+                            Visi & Misi
                         </a>
                     </li>
                     <li class="md:ml-4 md:hidden lg:block">
-                        <a class="py-2 inline-block md:text-white md:px-2 font-semibold" href="#">
+                        <a class="py-2 inline-block md:text-white md:px-2 font-semibold" href="#blog">
                             Artikel
                         </a>
                     </li>
                     <li class="md:ml-4">
-                        <a class="py-2 inline-block md:text-white md:px-2 font-semibold" href="#">
+                        <a class="py-2 inline-block md:text-white md:px-2 font-semibold" href="#contact">
                             Kontak
                         </a>
                     </li>

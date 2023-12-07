@@ -1,4 +1,4 @@
-<section class="relative bg-gray-100 px-4 sm:px-8 lg:px-16 xl:px-40 2xl:px-44 py-16 lg:py-24">
+<section class="relative bg-gray-100 px-4 sm:px-8 lg:px-16 xl:px-40 2xl:px-44 py-16 lg:py-24" id="vision">
     <div class="flex flex-col lg:flex-row lg:-mx-8">
         <div class="w-full lg:w-1/2 lg:px-8">
             <h2 class="text-3xl leading-tight font-bold mt-4">

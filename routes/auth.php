@@ -13,6 +13,7 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\MedicalRecordsController;
 use App\Http\Controllers\MedicinesController;
 use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -61,6 +62,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
+
+    Route::put('specialist', [ProfileController::class, 'update_specialist'])->name('specialist.update');
 
     Route::middleware('admin')->group(function () {
         Route::resource('user-list', UsersController::class)->names([

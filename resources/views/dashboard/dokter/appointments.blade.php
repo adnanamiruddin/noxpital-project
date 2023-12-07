@@ -133,5 +133,9 @@
                 @endforeach
             </tbody>
         </table>
+
+        <div class="p-4">
+            {{ $appointments->withQueryString()->links() }}
+        </div>
     </div>
 @endsection

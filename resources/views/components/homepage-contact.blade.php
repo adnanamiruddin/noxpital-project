@@ -1,5 +1,6 @@
 <section
-    class="relative px-4 sm:px-8 lg:px-16 xl:px-40 2xl:px-64 py-12 text-center md:text-left bg-gradient-to-br from-blue-400 to-teal-400">
+    class="relative px-4 sm:px-8 lg:px-16 xl:px-40 2xl:px-64 py-12 text-center md:text-left bg-gradient-to-br from-blue-400 to-teal-400"
+    id="contact">
     <div class="md:flex md:items-center md:justify-center">
         <h2 class="text-xl font-bold text-white">
             Untuk informasi lebih lanjut, <br class="block md:hidden" />

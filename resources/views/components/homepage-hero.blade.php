@@ -1,4 +1,4 @@
-<section
+<section id="home"
     class="px-4 sm:px-8 lg:px-16 xl:px-40 2xl:px-64 overflow-hidden flex items-center min-h-screen bg-gradient-to-br from-blue-400 to-teal-400">
     <div class="h-full absolute left-0 right-0 z-0">
         <img src="{{ asset('storage/assets/bg-hero.jpeg') }}" alt="Rumah Sakit Unhas"

@@ -160,9 +160,6 @@ class MedicinesController extends Controller
      */
     public function destroy(string $id)
     {
-        // if (Auth::check() && Auth::user()->role == 'apoteker') {
-        //     Medicine::find($id)->delete();
-        //     return redirect()->to('medicines')->with('success', "Data obat dengan Id $id berhasil dihapus");
-        // }
+        // 
     }
 }

@@ -1,4 +1,4 @@
-<section class="relative px-4 py-16 sm:px-8 lg:px-16 xl:px-40 2xl:px-64 lg:py-32">
+<section class="relative px-4 py-16 sm:px-8 lg:px-16 xl:px-40 2xl:px-64 lg:py-32" id="about">
     {{-- About Section START --}}
     <div class="flex flex-col lg:flex-row lg:-mx-8">
         <div class="w-full lg:w-1/2 lg:px-8">

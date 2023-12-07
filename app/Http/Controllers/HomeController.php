@@ -15,35 +15,6 @@ class HomeController extends Controller
                 $onDutyDoctors = User::where('role', 'dokter')->where('is_on_duty', true)->get();
                 return view('dashboard.admin.home', compact('onDutyDoctors'));
             } elseif (Auth::user()->role == 'pasien') {
-                // $medicalRecords = DB::table('medical_records')
-                //     ->join('users', 'medical_records.doctor_id', '=', 'users.id')
-                //     ->join(
-                //         'medical_records_medicines',
-                //         'medical_records.id',
-                //         '=',
-                //         'medical_records_medicines.medical_record_id'
-                //     )
-                //     ->join('medicines', 'medical_records_medicines.medicine_id', '=', 'medicines.id')
-                //     ->where('medical_records.patient_id', '=', Auth::user()->id)
-                //     ->select(
-                //         'medical_records.*',
-                //         'users.name as doctor_name',
-                //         DB::raw(
-                //             "GROUP_CONCAT(CONCAT(medical_records_medicines.amount, ' ', medicines.name) SEPARATOR ', ')
-                //             as daftar_obat"
-                //         )
-                //     )
-                //     ->groupBy(
-                //         'medical_records.id',
-                //         'medical_records.patient_id',
-                //         'medical_records.doctor_id',
-                //         'medical_records.action',
-                //         'medical_records.created_at',
-                //         'medical_records.updated_at',
-                //         'users.name'
-                //     )
-                //     ->get();
-
                 $medicalRecord = DB::table('medical_records')
                     ->join('users', 'medical_records.doctor_id', '=', 'users.id')
                     ->where('medical_records.patient_id', '=', Auth::user()->id)
@@ -68,6 +39,7 @@ class HomeController extends Controller
                         ->get();
                     return view('dashboard.pasien.home', compact('medicalRecord', 'medicines'));
                 }
+                return view('dashboard.pasien.new-home');
             } elseif (Auth::user()->role == 'dokter') {
                 $myData = User::find(Auth::user()->id);
 

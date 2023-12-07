@@ -32,6 +32,9 @@
                         Nama Dokter
                     </th>
                     <th scope="col" class="px-6 py-3">
+                        Ruangan Dokter
+                    </th>
+                    <th scope="col" class="px-6 py-3">
                         Status
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -65,6 +68,13 @@
                         </td>
                         <td class="px-6 py-4">
                             {{ $item->doctor_name }}
+                        </td>
+                        <td class="px-6 py-4">
+                            @if ($item->doctor_room_number != null)
+                                {{ $item->doctor_room_number }}
+                            @else
+                                Sedang tidak bertugas
+                            @endif
                         </td>
                         <td class="px-6 py-4">
                             @if ($item->status == 'selesai')
@@ -113,5 +123,9 @@
                 @endforeach
             </tbody>
         </table>
+
+        <div class="p-4">
+            {{ $appointments->withQueryString()->links() }}
+        </div>
     </div>
 @endsection

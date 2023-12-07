@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -56,5 +57,24 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function update_specialist(Request $request): RedirectResponse
+    {
+        if (Auth::check() && Auth::user()->role == 'dokter') {
+            $request->validate([
+                'specialist' => 'required|string|max:255',
+            ], [
+                'specialist.required' => 'Mohon tidak mengosongkan spesialis anda',
+                'specialist.string' => 'Input spesialis tidak boleh angka',
+                'specialist.max' => 'Batas maksimal input spesialis adalah 255 karakter',
+            ]);
+
+            User::where('id', Auth::user()->id)->update([
+                'specialist' => $request->specialist,
+            ]);
+
+            return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        }
     }
 }
