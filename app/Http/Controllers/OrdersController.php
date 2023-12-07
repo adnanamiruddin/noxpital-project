@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Medicine;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -113,10 +114,22 @@ class OrdersController extends Controller
                 return redirect()->back()->with('error', "Order telah selesai dikonfirmasi");
             }
 
+            for ($i = 0; $i < count($request->medicines_id); $i++) {
+                $medicine = Medicine::where('id', $request->medicines_id[$i])->first();
+
+                if ($medicine->stock < $request->medicines_amount[$i]) {
+                    return redirect()->back()->with('error', "Stok obat $medicine->name tidak mencukupi");
+                }
+
+                $medicine->update([
+                    'stock' => $medicine->stock - $request->medicines_amount[$i]
+                ]);
+            }
+
             $order->update([
                 'is_done' => true
             ]);
-            return redirect()->back()->with('success', 'Status order berhasil diperbarui!');
+            return redirect()->to('orders')->with('success', 'Status order berhasil diperbarui!');
         }
     }
 

@@ -90,18 +90,23 @@
             }
 
             const matchingMedicines = medicines.filter(medicine =>
-                medicine.toLowerCase().includes(inputText)
+                medicine.name.toLowerCase().includes(inputText)
             );
 
             matchingMedicines.forEach(matchingMedicine => {
                 const suggestionItem = document.createElement('div');
-                suggestionItem.textContent = matchingMedicine;
+                suggestionItem.textContent = matchingMedicine.name;
                 suggestionItem.classList.add('suggestion-item');
                 suggestionItem.addEventListener('click', () => {
-                    inputElement.value = matchingMedicine;
+                    inputElement.value = matchingMedicine.name;
                     suggestionsContainer.innerHTML = '';
                 });
                 suggestionsContainer.appendChild(suggestionItem);
+
+                const stockInfo = document.createElement('span');
+                stockInfo.textContent = ` (Stok: ${matchingMedicine.stock})`;
+                stockInfo.classList.add('text-gray-500', 'text-sm');
+                suggestionItem.appendChild(stockInfo);
             });
             document.addEventListener('click', handleDocumentClick);
         }
@@ -146,7 +151,6 @@
             newForm.appendChild(removeButton);
 
             medicineForms.appendChild(newForm);
-
             formIndex++;
         }
 
@@ -166,6 +170,7 @@
             inputElement.setAttribute('required', 'required');
             inputElement.setAttribute('oninput', `showMedicineSuggestions(this)`);
             inputElement.setAttribute('id', inputId);
+            inputElement.setAttribute('autocomplete', 'off');
             inputElement.classList.add('shadow-sm', 'bg-gray-50', 'border', 'border-gray-300', 'text-gray-900',
                 'text-sm',
                 'rounded-lg', 'focus:ring-blue-500', 'focus:border-blue-500', 'block', 'w-full', 'p-2.5',
@@ -178,7 +183,6 @@
             inputContainer.appendChild(labelElement);
             inputContainer.appendChild(inputElement);
             inputContainer.appendChild(suggestionsContainer);
-
             return inputContainer;
         }
     </script>

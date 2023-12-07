@@ -45,7 +45,7 @@
     </div>
 
     <div class="flex flex-wrap items-center justify-between py-6">
-        <a href="/" class="w-1/2 flex md:w-auto md:me-24">
+        <a href="{{ url('/') }}" class="w-1/2 flex md:w-auto md:me-24">
             <img src="{{ asset('storage/assets/icon-noxpital.jpeg') }}" alt="Icon Noxpital" class="h-10 me-3">
             <span class="text-white font-bold self-center text-2xl whitespace-nowrap dark:text-black">NoxPital</span>
         </a>
@@ -62,49 +62,27 @@
             <nav
                 class="w-full bg-white md:bg-transparent rounded shadow-lg px-6 py-4 mt-4 text-center md:p-0 md:mt-0 md:shadow-none">
                 <ul class="md:flex items-center">
-                    <li>
-                        <a class="py-2 inline-block md:text-white md:hidden lg:block font-semibold" href="#">
-                            Beranda
-                        </a>
-                    </li>
-                    <li class="md:ml-4">
-                        <a class="py-2 inline-block md:text-white md:px-2 font-semibold" href="#">
-                            Tentang Kami
-                        </a>
-                    </li>
-                    <li class="md:ml-4">
-                        <a class="py-2 inline-block md:text-white md:px-2 font-semibold" href="#">
-                            Layanan
-                        </a>
-                    </li>
-                    <li class="md:ml-4 md:hidden lg:block">
-                        <a class="py-2 inline-block md:text-white md:px-2 font-semibold" href="#">
-                            Artikel
-                        </a>
-                    </li>
-                    <li class="md:ml-4">
-                        <a class="py-2 inline-block md:text-white md:px-2 font-semibold" href="#">
-                            Kontak
-                        </a>
-                    </li>
-
-                    @if (Route::has('login'))
-                        @auth
-                            <li class="md:ml-6 mt-3 md:mt-0">
-                                <a href="{{ url('/dashboard') }}"
-                                    class="inline-block font-semibold px-4 py-2 text-white bg-blue-600 md:bg-transparent md:text-white border border-white rounded">
-                                    Dashboard
-                                </a>
-                            </li>
-                        @else
-                            <li class="md:ml-6 mt-3 md:mt-0">
-                                <a href="{{ route('login') }}"
-                                    class="inline-block font-semibold px-4 py-2 text-white bg-blue-600 md:bg-transparent md:text-white border border-white rounded">
-                                    Masuk
-                                </a>
-                            </li>
-                        @endauth
+                    @if (Route::is('login'))
+                        <li class="md:ml-6 mt-3 md:mt-0">
+                            <a href="{{ route('register') }}"
+                                class="inline-block font-semibold px-4 py-2 text-white bg-blue-600 md:bg-transparent md:text-white border border-white rounded">
+                                Daftar
+                            </a>
+                        </li>
+                    @else
+                        <li class="md:ml-6 mt-3 md:mt-0">
+                            <a href="{{ route('login') }}"
+                                class="inline-block font-semibold px-4 py-2 text-white bg-blue-600 md:bg-transparent md:text-white border border-white rounded">
+                                Masuk
+                            </a>
+                        </li>
                     @endif
+                    <li class="md:ml-4 mt-3 md:mt-0">
+                        <a href="{{ url('/') }}"
+                            class="inline-block font-semibold px-4 py-2 text-white bg-blue-600 md:bg-transparent md:text-white border border-white rounded">
+                            Kembali
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>

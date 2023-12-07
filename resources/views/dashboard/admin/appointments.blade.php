@@ -60,7 +60,7 @@
                         <td class="px-6 py-4">
                             {{ $item->patient_email }}
                         </td>
-                        <td class="p-4 text-justify">
+                        <td class="p-4">
                             {{ $item->patient_complaints }}
                         </td>
                         <td class="px-6 py-4">

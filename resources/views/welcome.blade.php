@@ -19,9 +19,23 @@
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </head>
 
-<body>
-    @include('layouts/homepage')
+<body class="antialiased bg-white font-sans text-gray-900">
+    @include('components.homepage-header')
+
+    @include('components.homepage-hero')
+
+    @include('components.homepage-about')
+
+    @include('components.homepage-vision')
+
+    @include('components.homepage-blog')
+
+    @include('components.homepage-contact')
+
+    @include('components.homepage-footer')
 </body>
+
+</html>
 
 {{-- <body class="antialiased">
         <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
@@ -145,5 +159,3 @@
             </div>
         </div>
     </body> --}}
-
-</html>

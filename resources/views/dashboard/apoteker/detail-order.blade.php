@@ -82,60 +82,64 @@
     </div>
 
     <h3 class="text-center text-4xl font-black mt-9 mb-6">Daftar Obat yang Dipesan</h3>
-
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg mb-4">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        No.
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Id Obat
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Nama Obat
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Tipe Obat
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Jumlah Obat
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php $no = 1; ?>
-                @foreach ($medicines as $item)
-                    <tr
-                        class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 hover:brightness-95">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ $no++ }}
+    <form method="POST" action="{{ url("orders/$orders->id") }}">
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg mb-4">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            No.
                         </th>
-                        <td class="px-6 py-4">
-                            {{ $item->id }}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ $item->name }}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ ucwords($item->type) }}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ $item->amount }}
-                        </td>
+                        <th scope="col" class="px-6 py-3">
+                            Id Obat
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Nama Obat
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Tipe Obat
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Jumlah Obat
+                        </th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    <?php $no = 1; ?>
+                    @foreach ($medicines as $item)
+                        <tr
+                            class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 hover:brightness-95">
+                            <th scope="row"
+                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {{ $no++ }}
+                            </th>
+                            <td class="px-6 py-4">
+                                {{ $item->id }}
+                                <input type="hidden" name="medicines_id[]" value="{{ $item->id }}">
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ $item->name }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ ucwords($item->type) }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ $item->amount }}
+                                <input type="hidden" name="medicines_amount[]" value="{{ $item->amount }}">
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
-    <form method="POST" action="{{ url("orders/$orders->id") }}" class="flex justify-center">
         @csrf
         @method('PUT')
-        <button type="submit"
-            class="mt-6 mb-4 text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">
-            Konfirmasi Pembayaran
-        </button>
+        <div class="flex justify-center">
+            <button type="submit"
+                class="mt-6 mb-4 text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">
+                Konfirmasi Pembayaran
+            </button>
+        </div>
     </form>
 @endsection

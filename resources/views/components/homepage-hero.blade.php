@@ -5,12 +5,12 @@
             class="w-full h-full object-cover opacity-25" />
     </div>
 
-    <div class="lg:w-3/4 xl:w-2/4 relative z-10 h-100 lg:mt-16">
+    <div class="lg:w-3/4 xl:w-2/4 relative z-10 h-100 lg:mt-20">
         <div>
-            <h1 class="text-white text-4xl md:text-5xl xl:text-6xl font-bold leading-tight">
+            <h1 class="text-white text-4xl md:text-5xl font-bold leading-tight">
                 RSPTN Universitas Hasanuddin
             </h1>
-            <p class="text-blue-100 text-xl md:text-2xl leading-snug mt-4">
+            <p class="text-blue-100 text-xl 2xl:text-2xl leading-snug mt-4">
                 Rumah Sakit Universitas Hasanuddin (RS Unhas) sebagai rumah sakit pendidikan untuk Fakultas Kedokteran
                 Universitas Hasanuddin, yang beroperasi sejak tahun 2011.
             </p>

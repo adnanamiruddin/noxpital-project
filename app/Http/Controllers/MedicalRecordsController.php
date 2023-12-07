@@ -90,7 +90,12 @@ class MedicalRecordsController extends Controller
     public function create()
     {
         if (Auth::check() && Auth::user()->role == 'dokter') {
-            $medicines = Medicine::pluck('name');
+            $medicines = Medicine::select('name', 'stock')->get()->map(function ($item) {
+                return [
+                    'name' => $item->name,
+                    'stock' => $item->stock,
+                ];
+            })->toArray();
             return view('dashboard.dokter.create-medical-record', compact('medicines'));
         }
     }

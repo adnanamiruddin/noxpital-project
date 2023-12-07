@@ -20,21 +20,27 @@
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </head>
 
-<body class="font-sans text-gray-900 antialiased">
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
-        {{-- <div>
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
+<body class="antialiased bg-white font-sans text-gray-900">
+    @include('components.auth-header')
+
+    <section
+        class="px-4 sm:px-8 lg:px-16 xl:px-40 2xl:px-64 overflow-hidden flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-400 to-teal-400">
+        <div class="h-full absolute left-0 right-0 z-0">
+            <img src="{{ asset('storage/assets/bg-hero.jpeg') }}" alt="Rumah Sakit Unhas"
+                class="w-full h-full object-cover opacity-25" />
         </div>
 
         <div
-            class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
-            {{ $slot }}
-        </div> --}}
+            class="z-10 w-full sm:max-w-md mt-12 p-6 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
+            <div class="flex justify-center">
+                <img src="{{ asset('storage/assets/icon-noxpital.jpeg') }}" alt="Icon NoxPital"
+                    class="w-20 h-20 object-cover" />
+            </div>
+            <h2 class="text-center text-3xl font-black my-4">@yield('title')</h2>
 
-        @yield('content')
-    </div>
+            @yield('form')
+        </div>
+    </section>
 </body>
 
 </html>

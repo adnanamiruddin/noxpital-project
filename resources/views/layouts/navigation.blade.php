@@ -14,10 +14,10 @@
                         </path>
                     </svg>
                 </button>
-                <a href="/" class="flex ms-2 md:me-24">
+                <a href="{{ url('/') }}" class="flex ms-2 md:me-24">
                     <img src="{{ asset('storage/assets/icon-noxpital.jpeg') }}" alt="Icon Noxpital" class="h-8 me-3">
                     <span
-                        class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">NoxPital</span>
+                        class="self-center text-xl font-black sm:text-2xl whitespace-nowrap dark:text-white">NoxPital</span>
                 </a>
             </div>
 
@@ -39,18 +39,21 @@
                 </x-slot>
 
                 <x-slot name="content">
-                    <x-dropdown-link :href="route('profile.edit')">
-                        {{ __('Profile') }}
+                    <x-dropdown-link :href="route('profile.edit')" class="flex items-center">
+                        <ion-icon name="person-outline" class="w-5 h-5 text-gray-700"></ion-icon>
+                        <span class="ms-3">{{ __('Profil') }}</span>
                     </x-dropdown-link>
 
-                    <!-- Authentication -->
+                    {{-- Authentication --}}
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
 
                         <x-dropdown-link :href="route('logout')"
                             onclick="event.preventDefault();
-                                            this.closest('form').submit();">
-                            {{ __('Log Out') }}
+                                            this.closest('form').submit();"
+                            class="flex items-center">
+                            <ion-icon name="log-out-outline" class="w-5 h-5 text-gray-700"></ion-icon>
+                            <span class="ms-3">{{ __('Keluar') }}</span>
                         </x-dropdown-link>
                     </form>
                 </x-slot>
@@ -66,13 +69,7 @@
         <ul class="space-y-2 font-medium">
             <li>
                 <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
-                    <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
-                        <path
-                            d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
-                        <path
-                            d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
-                    </svg>
+                    <ion-icon name="home" class="w-5 h-5 text-gray-700"></ion-icon>
                     <span class="ms-3">Beranda</span>
                 </x-nav-link>
             </li>
@@ -80,13 +77,15 @@
             @if (Auth::check() && Auth::user()->role == 'admin')
                 <li>
                     <x-nav-link :href="route('user-list')" :active="request()->routeIs('user-list')">
-                        {{ __('Daftar User') }}
+                        <ion-icon name="people-sharp" class="w-5 h-5 text-gray-700"></ion-icon>
+                        <span class="ms-3">{{ __('Daftar User') }}</span>
                     </x-nav-link>
                 </li>
 
                 <li>
                     <x-nav-link :href="route('appointments')" :active="request()->routeIs('appointments')">
-                        {{ __('Daftar Janjian') }}
+                        <ion-icon name="calendar" class="w-5 h-5 text-gray-700"></ion-icon>
+                        <span class="ms-3">{{ __('Daftar Janjian') }}</span>
                     </x-nav-link>
                 </li>
             @endif
@@ -94,19 +93,22 @@
             @if (Auth::check() && Auth::user()->role == 'dokter')
                 <li>
                     <x-nav-link :href="route('patient-list')" :active="request()->routeIs('patient-list')">
-                        {{ __('Daftar Pasien') }}
+                        <ion-icon name="people-sharp" class="w-5 h-5 text-gray-700"></ion-icon>
+                        <span class="ms-3">{{ __('Daftar Pasien') }}</span>
                     </x-nav-link>
                 </li>
 
                 <li>
                     <x-nav-link :href="route('doctor-appointments')" :active="request()->routeIs('doctor-appointments')">
-                        {{ __('Daftar Janjian') }}
+                        <ion-icon name="calendar" class="w-5 h-5 text-gray-700"></ion-icon>
+                        <span class="ms-3">{{ __('Daftar Janjian') }}</span>
                     </x-nav-link>
                 </li>
 
                 <li>
                     <x-nav-link :href="route('medical-records')" :active="request()->routeIs('medical-records')">
-                        {{ __('Rekam Medis') }}
+                        <ion-icon name="analytics-sharp" class="w-5 h-5 text-gray-700"></ion-icon>
+                        <span class="ms-3">{{ __('Rekam Medis') }}</span>
                     </x-nav-link>
                 </li>
             @endif
@@ -114,13 +116,15 @@
             @if (Auth::check() && Auth::user()->role == 'apoteker')
                 <li>
                     <x-nav-link :href="route('medicines')" :active="request()->routeIs('medicines')">
-                        {{ __('Daftar Obat') }}
+                        <ion-icon name="medkit" class="w-5 h-5 text-gray-700"></ion-icon>
+                        <span class="ms-3">{{ __('Daftar Obat') }}</span>
                     </x-nav-link>
                 </li>
 
                 <li>
                     <x-nav-link :href="route('orders')" :active="request()->routeIs('orders')">
-                        {{ __('Daftar Pesanan') }}
+                        <ion-icon name="cart" class="w-5 h-5 text-gray-700"></ion-icon>
+                        <span class="ms-3">{{ __('Daftar Pesanan') }}</span>
                     </x-nav-link>
                 </li>
             @endif
@@ -128,14 +132,16 @@
             @if (Auth::check() && Auth::user()->role == 'pasien')
                 <li>
                     <x-nav-link :href="route('patient-medical-records')" :active="request()->routeIs('patient-medical-records')">
-                        {{ __('Rekam Medis') }}
+                        <ion-icon name="analytics-sharp" class="w-5 h-5 text-gray-700"></ion-icon>
+                        <span class="ms-3">{{ __('Rekam Medis') }}</span>
                     </x-nav-link>
                 </li>
             @endif
 
             <li>
                 <x-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit')">
-                    {{ __('Profil') }}
+                    <ion-icon name="person-sharp" class="w-5 h-5 text-gray-700"></ion-icon>
+                    <span class="ms-3">{{ __('Profil') }}</span>
                 </x-nav-link>
             </li>
         </ul>
