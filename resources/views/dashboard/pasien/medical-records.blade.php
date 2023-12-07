@@ -4,6 +4,10 @@
     Rekam Medis Saya
 @endsection
 
+@section('search_form')
+    @include('components.search-form', ['action' => route('patient-medical-records.search')])
+@endsection
+
 @section('content')
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -60,5 +64,9 @@
                 @endforeach
             </tbody>
         </table>
+
+        <div class="p-4">
+            {{ $medicalRecords->withQueryString()->links() }}
+        </div>
     </div>
 @endsection

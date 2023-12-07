@@ -4,6 +4,10 @@
     Rekam Medis Pasien
 @endsection
 
+@section('search_form')
+    @include('components.search-form', ['action' => route('medical-records.search')])
+@endsection
+
 @section('content')
     <div class="mb-8">
         <a href="{{ route('medical-records.create') }}"
@@ -81,5 +85,9 @@
                 @endforeach
             </tbody>
         </table>
+
+        <div class="p-4">
+            {{ $patients->withQueryString()->links() }}
+        </div>
     </div>
 @endsection

@@ -72,7 +72,10 @@ Route::middleware('auth')->group(function () {
             'update' => 'user-list.update',
             'destroy' => 'user-list.destroy',
         ]);
-        Route::post('user-list', [UsersController::class, 'index'])->name('user-list.search');
+        Route::post(
+            'user-list/search',
+            [UsersController::class, 'index']
+        )->name('user-list.search');
         Route::resource('appointments', AppointmentsController::class)->names([
             'index' => 'appointments',
             'create' => 'appointments.create',
@@ -94,7 +97,10 @@ Route::middleware('auth')->group(function () {
             'update' => 'medicines.update',
             'destroy' => 'medicines.destroy',
         ]);
-        Route::post('medicines', [MedicinesController::class, 'index'])->name('medicines.search');
+        Route::post(
+            'medicines/search',
+            [MedicinesController::class, 'index']
+        )->name('medicines.search');
         Route::resource('orders', OrdersController::class)->names([
             'index' => 'orders',
             'create' => 'orders.create',
@@ -108,7 +114,7 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('dokter')->group(function () {
         Route::get('patient-list', [UsersController::class, 'index'])->name('patient-list');
-        Route::post('patient-list', [UsersController::class, 'index'])->name('patient-list.search');
+        Route::post('patient-list/search', [UsersController::class, 'index'])->name('patient-list.search');
         // Route::get('patient-list/{id}', [UsersController::class, 'show'])->name('patient-list.show');
         Route::resource('medical-records', MedicalRecordsController::class)->names([
             'index' => 'medical-records',
@@ -119,6 +125,10 @@ Route::middleware('auth')->group(function () {
             'update' => 'medical-records.update',
             'destroy' => 'medical-records.destroy',
         ]);
+        Route::post(
+            'medical-records/search',
+            [MedicalRecordsController::class, 'index']
+        )->name('medical-records.search');
         Route::resource('doctor-appointments', AppointmentsController::class)->names([
             'index' => 'doctor-appointments',
             'create' => 'doctor-appointments.create',
@@ -142,6 +152,10 @@ Route::middleware('auth')->group(function () {
             'update' => 'patient-medical-records.update',
             'destroy' => 'patient-medical-records.destroy',
         ]);
+        Route::post(
+            'patient-medical-records/search',
+            [MedicalRecordsController::class, 'index']
+        )->name('patient-medical-records.search');
         // Route::resource('patient-appointments', AppointmentsController::class)->names([
         //     'index' => 'patient-appointments',
         //     'create' => 'patient-appointments.create',

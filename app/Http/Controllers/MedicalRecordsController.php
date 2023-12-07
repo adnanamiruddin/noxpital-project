@@ -18,7 +18,7 @@ class MedicalRecordsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         if (Auth::check()) {
             if (Auth::user()->role == 'dokter') {
@@ -33,7 +33,30 @@ class MedicalRecordsController extends Controller
                         'medical_records.created_at as medical_record_created_at'
                     )
                     ->orderBy('medical_records.updated_at', 'desc')
-                    ->get();
+                    ->paginate(20);
+
+                if ($request->search_keywords) {
+                    $searchKeywords = $request->search_keywords;
+                    $patients = DB::table('users')
+                        ->join('medical_records', 'users.id', '=', 'medical_records.patient_id')
+                        ->join('users as doctors', 'medical_records.doctor_id', '=', 'doctors.id')
+                        ->where('users.role', '=', 'pasien')
+                        ->where('users.name', 'like', "%$searchKeywords%")
+                        ->orWhere('users.email', 'like', "%$searchKeywords%")
+                        ->orWhere('users.specialist', 'like', "%$searchKeywords%")
+                        ->orWhere('users.room_number', 'like', "%$searchKeywords%")
+                        ->orWhere('doctors.name', 'like', "%$searchKeywords%")
+                        ->orWhere('medical_records.action', 'like', "%$searchKeywords%")
+                        ->orWhere('medical_records.updated_at', 'like', "%$searchKeywords%")
+                        ->select(
+                            'users.*',
+                            'medical_records.*',
+                            'doctors.name as doctor_name',
+                            'medical_records.created_at as medical_record_created_at'
+                        )
+                        ->orderBy('medical_records.updated_at', 'desc')
+                        ->paginate(20);
+                }
                 return view('dashboard.dokter.medical-records', compact('patients'));
             } else if (Auth::user()->role == 'pasien') {
                 $medicalRecords = DB::table('medical_records')
@@ -41,7 +64,20 @@ class MedicalRecordsController extends Controller
                     ->where('medical_records.patient_id', '=', Auth::user()->id)
                     ->select('medical_records.*', 'users.name as doctor_name')
                     ->orderBy('medical_records.updated_at', 'desc')
-                    ->get();
+                    ->paginate(20);
+
+                if ($request->search_keywords) {
+                    $searchKeywords = $request->search_keywords;
+                    $medicalRecords = DB::table('medical_records')
+                        ->join('users', 'medical_records.doctor_id', '=', 'users.id')
+                        ->where('medical_records.patient_id', '=', Auth::user()->id)
+                        ->where('users.name', 'like', "%$searchKeywords%")
+                        ->orWhere('medical_records.action', 'like', "%$searchKeywords%")
+                        ->orWhere('medical_records.updated_at', 'like', "%$searchKeywords%")
+                        ->select('medical_records.*', 'users.name as doctor_name')
+                        ->orderBy('medical_records.updated_at', 'desc')
+                        ->paginate(20);
+                }
                 return view('dashboard.pasien.medical-records', compact('medicalRecords'));
             }
             abort(401);

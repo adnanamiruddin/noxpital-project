@@ -55,6 +55,7 @@ class UsersController extends Controller
                         ->orWhere('users.room_number', 'like', "%$searchKeywords%")
                         ->orWhere('doctors.name', 'like', "%$searchKeywords%")
                         ->orWhere('medical_records.action', 'like', "%$searchKeywords%")
+                        ->orWhere('medical_records.updated_at', 'like', "%$searchKeywords%")
                         ->select(
                             'users.*',
                             'doctors.name as doctor_name',
@@ -108,14 +109,25 @@ class UsersController extends Controller
                 'password_confirmation.same' => 'Konfirmasi password tidak sama',
             ]);
 
+            if ($request->role == 'dokter') {
+                $request->validate([
+                    'specialist' => 'required',
+                ], [
+                    'specialist.required' => 'Spesialis harus diisi',
+                ]);
+            }
+
+            $specialist = $request->role == 'dokter' ? $request->specialist : null;
             User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'role' => $request->role,
                 'password' => bcrypt($request->password),
+                'specialist' => $specialist,
             ]);
             return redirect()->to('user-list')->with('success', 'User berhasil ditambahkan');
         }
+        abort(401);
     }
 
     /**
@@ -131,7 +143,7 @@ class UsersController extends Controller
      */
     public function edit(string $id)
     {
-        $selectedUser = User::find($id)->first();
+        $selectedUser = User::where('id', $id)->first();
         return view('dashboard.admin.edit-user', compact('selectedUser'));
     }
 
