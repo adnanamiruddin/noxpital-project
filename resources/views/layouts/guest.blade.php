@@ -18,6 +18,16 @@
     {{-- Ion Icons --}}
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <style>
+        #menu-toggle:checked+#menu {
+            display: block;
+        }
+
+        #dropdown-toggle:checked+#dropdown {
+            display: block;
+        }
+    </style>
 </head>
 
 <body class="antialiased bg-white font-sans text-gray-900">

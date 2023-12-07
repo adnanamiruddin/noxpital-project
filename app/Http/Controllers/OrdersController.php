@@ -20,7 +20,7 @@ class OrdersController extends Controller
                 ->join('medical_records', 'orders.medical_record_id', '=', 'medical_records.id')
                 ->join('users', 'medical_records.patient_id', '=', 'users.id')
                 ->join('users as doctors', 'medical_records.doctor_id', '=', 'doctors.id')
-                ->orderBy('orders.updated_at', 'desc')
+                ->orderBy('orders.created_at', 'desc')
                 ->select(
                     'orders.*',
                     'users.name as patient_name',
@@ -114,24 +114,54 @@ class OrdersController extends Controller
                 return redirect()->back()->with('error', "Order telah selesai dikonfirmasi");
             }
 
-            for ($i = 0; $i < count($request->medicines_id); $i++) {
-                $medicine = Medicine::where('id', $request->medicines_id[$i])->first();
+            $medicineData = [];
 
-                if ($medicine->stock < $request->medicines_amount[$i]) {
+            for ($i = 0; $i < count($request->medicines_id); $i++) {
+                $medicineId = $request->medicines_id[$i];
+                $amount = $request->medicines_amount[$i];
+
+                if (isset($medicineData[$medicineId])) {
+                    $medicineData[$medicineId]['amount'] += $amount;
+                } else {
+                    $medicine = Medicine::find($medicineId);
+                    if ($medicine->stock < $amount) {
+                        return redirect()->back()->with('error', "Stok obat $medicine->name tidak mencukupi");
+                    }
+
+                    $medicineData[$medicineId] = [
+                        'medicine' => $medicine,
+                        'amount' => $amount,
+                    ];
+                }
+            }
+
+            usort($medicineData, function ($a, $b) {
+                return $a['medicine']->stock - $b['medicine']->stock;
+            });
+            // dd($medicineData);
+
+            foreach ($medicineData as $medicineId => $data) {
+                $medicine = $data['medicine'];
+                $amount = $data['amount'];
+                $stock = $medicine->stock;
+
+                if ($stock < $amount) {
                     return redirect()->back()->with('error', "Stok obat $medicine->name tidak mencukupi");
                 }
 
                 $medicine->update([
-                    'stock' => $medicine->stock - $request->medicines_amount[$i]
+                    'stock' => $medicine->stock - $amount
                 ]);
             }
 
             $order->update([
                 'is_done' => true
             ]);
+
             return redirect()->to('orders')->with('success', 'Status order berhasil diperbarui!');
         }
     }
+
 
     /**
      * Remove the specified resource from storage.

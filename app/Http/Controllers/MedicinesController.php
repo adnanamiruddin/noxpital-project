@@ -18,6 +18,7 @@ class MedicinesController extends Controller
             $medicines = DB::table('medicines')
                 ->join('users', 'medicines.pharmacist_id', '=', 'users.id')
                 ->select('medicines.*', 'users.name as pharmacist_name', 'medicines.updated_at as medicines_updated_at')
+                ->orderBy('medicines.name', 'asc')
                 ->paginate(20);
 
             if ($request->search_keywords) {
@@ -32,6 +33,7 @@ class MedicinesController extends Controller
                     ->orWhere('users.name', 'like', "%$searchKeywords%")
                     ->orWhere('users.updated_at', 'like', "%$searchKeywords%")
                     ->select('medicines.*', 'users.name as pharmacist_name', 'medicines.updated_at as medicines_updated_at')
+                    ->orderBy('medicines.name', 'asc')
                     ->paginate(20);
             }
 
@@ -60,8 +62,8 @@ class MedicinesController extends Controller
             $request->validate([
                 'name' => 'required|unique:medicines',
                 'type' => 'required',
-                'price' => 'required|numeric',
-                'stock' => 'required|numeric',
+                'price' => 'required|numeric|min:0',
+                'stock' => 'required|numeric|min:0',
                 'description' => 'required',
                 'image' => 'image|mimes:jpeg,png,jpg|max:2048',
             ], [
@@ -70,8 +72,10 @@ class MedicinesController extends Controller
                 'type.required' => 'Tipe obat harus diisi',
                 'price.required' => 'Harga harus diisi',
                 'price.numeric' => 'Harga harus berupa angka',
+                'price.min' => 'Harga tidak boleh kurang dari 0',
                 'stock.required' => 'Stok harus diisi',
                 'stock.numeric' => 'Stok harus berupa angka',
+                'stock.min' => 'Stok tidak boleh kurang dari 0',
                 'description.required' => 'Deskripsi harus diisi',
                 'image.image' => 'File harus berupa gambar',
                 'image.mimes' => 'Format gambar harus jpeg, png, atau jpg',

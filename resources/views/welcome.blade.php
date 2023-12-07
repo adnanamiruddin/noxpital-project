@@ -22,6 +22,14 @@
         html {
             scroll-behavior: smooth;
         }
+
+        #menu-toggle:checked+#menu {
+            display: block;
+        }
+
+        #dropdown-toggle:checked+#dropdown {
+            display: block;
+        }
     </style>
 </head>
 

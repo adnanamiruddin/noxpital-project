@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <div class="mb-8">
+    <div class="mb-4">
         @include('dashboard.admin.create-appointment')
     </div>
 
